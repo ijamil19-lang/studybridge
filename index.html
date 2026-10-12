@@ -103,8 +103,47 @@
 
       const universities = await response.json();
 
-      message.textContent =
-        `Connected to Supabase! Retrieved ${universities.length} university records.`;
+     
+const list = document.getElementById("universityList");
+
+list.innerHTML = "";
+
+if (universities.length === 0) {
+  list.textContent = "No universities found.";
+} else {
+  universities.forEach(function(university) {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = university.name || "University";
+
+    const location = document.createElement("p");
+    location.textContent = [
+      university.city,
+      university.country_code
+    ].filter(Boolean).join(", ");
+
+    card.appendChild(title);
+    card.appendChild(location);
+
+    if (university.website_url &&
+        /^https?:\/\//i.test(university.website_url)) {
+      const link = document.createElement("a");
+      link.href = university.website_url;
+      link.textContent = "Official university website →";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      card.appendChild(link);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+message.textContent =
+  `Showing ${universities.length} universities.`;
+
 
     } catch (error) {
       message.textContent = "Connection error: " + error.message;
