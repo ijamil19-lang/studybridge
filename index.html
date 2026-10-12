@@ -22,6 +22,59 @@
     .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px #0000000d; }
     .card h3 { margin-top: 0; }
     footer { text-align: center; padding: 25px; background: #123b70; color: white; }
+  
+/* StudyBridge premium card design */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 6px 22px rgba(16, 42, 82, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(16, 42, 82, 0.13);
+}
+
+.card h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  color: #123b70;
+  margin-bottom: 14px;
+}
+
+.card p {
+  color: #56657b;
+  line-height: 1.7;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 12px;
+  color: #1769aa;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 22px;
+  }
+}
+
   </style>
 </head>
 <body>
