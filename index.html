@@ -240,7 +240,7 @@ async function loadProgrammes() {
     const url = `${SUPABASE_URL}/rest/v1/programmes` +
       `?select=name,degree_level,subject,programme_url,universities!inner(name,country_code)` +
       `&universities.country_code=eq.SE` +
-      `&order=name.asc&limit=12`;
+      `&order=name.asc&limit=1000`;
 
     const response = await fetch(url, {
       headers: { apikey: SUPABASE_KEY }
