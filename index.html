@@ -85,7 +85,7 @@
 
     try {
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/universities?select=*&limit=5`,
+        `${SUPABASE_URL}/rest/v1/universities?select=*&country_code=eq.SE&order=name.asc&limit=40`,
         {
           headers: {
             apikey: SUPABASE_KEY
