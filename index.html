@@ -233,6 +233,9 @@ message.textContent =
       loadUniversities();
     });
 
+document.getElementById("programmeSearchButton")
+  .addEventListener("click", loadProgrammes);
+
 async function loadProgrammes() {
   const list = document.getElementById("programmeList");
 
@@ -251,6 +254,21 @@ async function loadProgrammes() {
     }
 
     const programmes = await response.json();
+    
+const searchTerm = document
+  .getElementById("programmeSearch")
+  .value.trim().toLowerCase();
+
+const filteredProgrammes = programmes.filter(function(programme) {
+  return [
+    programme.name,
+    programme.subject,
+    programme.universities?.name
+  ].some(function(value) {
+    return (value || "").toLowerCase().includes(searchTerm);
+  });
+});
+
     list.replaceChildren();
 
     if (programmes.length === 0) {
@@ -258,7 +276,7 @@ async function loadProgrammes() {
       return;
     }
 
-    programmes.forEach(function(programme) {
+   filteredProgrammes.forEach(function(programme) {
       const card = document.createElement("div");
       card.className = "card";
 
