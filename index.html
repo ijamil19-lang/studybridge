@@ -280,6 +280,24 @@ const filteredProgrammes = programmes.filter(function(programme) {
       const card = document.createElement("div");
       card.className = "card";
 
+const badge = document.createElement("div");
+
+badge.textContent = "🇸🇪  Sweden  •  🎓  " +
+  (programme.degree_level || "Study Programme");
+
+badge.style.cssText = `
+  display: inline-block;
+  background: #eaf3ff;
+  color: #174b83;
+  padding: 9px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 18px;
+`;
+
+card.appendChild(badge);
+
       const title = document.createElement("h3");
       title.textContent = programme.name;
 
