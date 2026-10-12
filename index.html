@@ -78,12 +78,44 @@
 
   <footer>© 2026 StudyBridge. All rights reserved.</footer>
 
-  <script>
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
+  
+<script>
+  const SUPABASE_URL = "https://fkhjpunzfugjcyxqulzm.supabase.co/rest/v1/";
+  const SUPABASE_KEY = "sb_publishable_-fa_jUcsGTzjUFatez1adg_aN9rip7c";
+
+  async function loadUniversities() {
+    const message = document.getElementById("searchMessage");
+
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/universities?select=*&limit=5`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Database request failed: " + response.status);
+      }
+
+      const universities = await response.json();
+
+      message.textContent =
+        `Connected to Supabase! Retrieved ${universities.length} university records.`;
+
+    } catch (error) {
+      message.textContent = "Connection error: " + error.message;
+    }
+  }
+
+  document.getElementById("searchForm")
+    .addEventListener("submit", function(event) {
       event.preventDefault();
-      document.getElementById("searchMessage").textContent =
-        "University search is coming soon.";
+      loadUniversities();
     });
-  </script>
+</script>
+
 </body>
 </html>
