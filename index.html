@@ -75,6 +75,54 @@
   }
 }
 
+/* Consistent programme card layout */
+#programmeList {
+  align-items: stretch;
+}
+
+#programmeList .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+/* Reserve equal space for programme titles */
+#programmeList .card h3 {
+  min-height: 100px;
+  margin: 0 0 16px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* University name */
+#programmeList .card h3 + p {
+  min-height: 60px;
+  margin: 0 0 12px;
+}
+
+/* Degree and subject */
+#programmeList .card h3 + p + p {
+  margin: 0 0 20px;
+}
+
+/* Align official links along the bottom */
+#programmeList .card a {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+/* Adjust spacing on mobile */
+@media (max-width: 600px) {
+  #programmeList .card h3 {
+    min-height: 0;
+  }
+
+  #programmeList .card h3 + p {
+    min-height: 0;
+  }
+}
+
   </style>
 </head>
 <body>
