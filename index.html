@@ -113,10 +113,10 @@ const list = document.getElementById("universityList");
 
 list.innerHTML = "";
 
-if (universities.length === 0) {
+if (filteredUniversities.length === 0) {
   list.textContent = "No universities found.";
 } else {
-  universities.forEach(function(university) {
+  filteredUniversities.forEach(function(university) {
     const card = document.createElement("div");
     card.className = "card";
 
@@ -147,7 +147,7 @@ if (universities.length === 0) {
 }
 
 message.textContent =
-  `Showing ${universities.length} universities.`;
+ `Showing ${filteredUniversities.length} universities.`;
 
 
     } catch (error) {
