@@ -266,14 +266,40 @@ message.textContent =
 document.getElementById("programmeSearchButton")
   .addEventListener("click", loadProgrammes);
 
+document.getElementById("countryFilter")
+  .addEventListener("change", loadProgrammes);
+
+document.getElementById("degreeFilter")
+  .addEventListener("change", loadProgrammes);
+
 async function loadProgrammes() {
   const list = document.getElementById("programmeList");
 
   try {
-    const url = `${SUPABASE_URL}/rest/v1/programmes` +
-      `?select=name,degree_level,subject,programme_url,universities!inner(name,country_code)` +
-      `&universities.country_code=eq.SE` +
-      `&order=name.asc&limit=1000`;
+   
+const country = document.getElementById("countryFilter").value;
+const degree = document.getElementById("degreeFilter").value;
+
+const params = new URLSearchParams();
+
+params.set(
+  "select",
+  "name,degree_level,subject,programme_url,universities!inner(name,country_code)"
+);
+
+if (country !== "all") {
+  params.set("universities.country_code", "eq." + country);
+}
+
+if (degree !== "all") {
+  params.set("degree_level", "eq." + degree);
+}
+
+params.set("order", "name.asc");
+params.set("limit", "1000");
+
+const url = `${SUPABASE_URL}/rest/v1/programmes?${params.toString()}`;
+
 
     const response = await fetch(url, {
       headers: { apikey: SUPABASE_KEY }
