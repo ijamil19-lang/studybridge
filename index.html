@@ -131,6 +131,33 @@
   </button>
 </div>
 
+<div class="programme-filters"
+     style="display:flex;gap:15px;flex-wrap:wrap;margin:20px 0;">
+
+  <div style="flex:1;min-width:200px;">
+    <label for="countryFilter">🌍 Country</label>
+    <select id="countryFilter"
+      style="width:100%;padding:14px;border:1px solid #d5dce5;border-radius:10px;margin-top:8px;">
+      <option value="SE" selected>Sweden</option>
+      <option value="all">All Countries</option>
+    </select>
+  </div>
+
+  <div style="flex:1;min-width:200px;">
+    <label for="degreeFilter">🎓 Degree Level</label>
+    <select id="degreeFilter"
+      style="width:100%;padding:14px;border:1px solid #d5dce5;border-radius:10px;margin-top:8px;">
+      <option value="all" selected>All Degrees</option>
+      <option value="Bachelor">Bachelor's</option>
+      <option value="Master">Master's</option>
+      <option value="PhD">PhD</option>
+      <option value="Postdoc">Postdoctoral</option>
+      <option value="Foundation">Foundation</option>
+    </select>
+  </div>
+
+</div>
+
   <div class="cards" id="programmeList">
     <div class="card">
       <p>Programme listings will appear here.</p>
