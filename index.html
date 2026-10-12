@@ -166,6 +166,71 @@ message.textContent =
       event.preventDefault();
       loadUniversities();
     });
+
+async function loadProgrammes() {
+  const list = document.getElementById("programmeList");
+
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/programmes` +
+      `?select=name,degree_level,subject,programme_url,universities!inner(name,country_code)` +
+      `&universities.country_code=eq.SE` +
+      `&order=name.asc&limit=12`;
+
+    const response = await fetch(url, {
+      headers: { apikey: SUPABASE_KEY }
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed: " + response.status);
+    }
+
+    const programmes = await response.json();
+    list.replaceChildren();
+
+    if (programmes.length === 0) {
+      list.textContent = "No programmes found.";
+      return;
+    }
+
+    programmes.forEach(function(programme) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const title = document.createElement("h3");
+      title.textContent = programme.name;
+
+      const university = document.createElement("p");
+      university.textContent =
+        programme.universities?.name || "University not specified";
+
+      const details = document.createElement("p");
+      details.textContent = [
+        programme.degree_level,
+        programme.subject
+      ].filter(Boolean).join(" • ");
+
+      card.append(title, university, details);
+
+      if (programme.programme_url &&
+          /^https?:\/\//i.test(programme.programme_url)) {
+        const link = document.createElement("a");
+        link.href = programme.programme_url;
+        link.textContent = "Official programme page →";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        card.appendChild(link);
+      }
+
+      list.appendChild(card);
+    });
+
+  } catch (error) {
+    list.textContent = "Unable to load programmes: " + error.message;
+  }
+}
+
+loadProgrammes();
+
 </script>
 
 </body>
