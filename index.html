@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyBridge | Find Your University</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f5f7fb; color: #172b4d; }
+    header { background: #123b70; color: white; padding: 20px 8%; }
+    nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    nav a { color: white; text-decoration: none; margin-left: 18px; }
+    .hero { text-align: center; padding: 85px 20px; background: linear-gradient(135deg,#123b70,#2478b9); color: white; }
+    .hero h1 { font-size: clamp(30px,5vw,48px); }
+    .hero p { font-size: 18px; }
+    .search { margin: 30px auto; max-width: 650px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .search input { flex: 1; min-width: 200px; padding: 16px; border: 0; border-radius: 8px; font-size: 16px; }
+    .search button { padding: 16px 25px; background: #ffca46; border: 0; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    section { padding: 50px 8%; max-width: 1200px; margin: auto; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 20px; }
+    .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px #0000000d; }
+    .card h3 { margin-top: 0; }
+    footer { text-align: center; padding: 25px; background: #123b70; color: white; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <strong>🎓 StudyBridge</strong>
+      <div>
+        <a href="#universities">Universities</a>
+        <a href="#programmes">Programmes</a>
+        <a href="#about">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Your Journey to Higher Education Starts Here</h1>
+    <p>Discover universities, degree programmes, scholarships and admission information.</p>
+    <form class="search" id="searchForm">
+      <input id="searchInput" type="search" placeholder="Search universities or courses..." aria-label="Search universities or courses">
+      <button type="submit">Search</button>
+    </form>
+    <p id="searchMessage" aria-live="polite"></p>
+  </div>
+
+  <section id="universities">
+    <h2>Explore Universities</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>🇸🇪 Study in Sweden</h3>
+        <p>Explore Swedish universities and international study opportunities.</p>
+      </div>
+      <div class="card">
+        <h3>🌍 More Countries</h3>
+        <p>Additional destinations will be available as verified information is published.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="programmes">
+    <h2>Find Your Programme</h2>
+    <div class="cards">
+      <div class="card"><h3>Bachelor's Degrees</h3><p>Explore undergraduate programmes.</p></div>
+      <div class="card"><h3>Master's Degrees</h3><p>Discover postgraduate study options.</p></div>
+      <div class="card"><h3>PhD Opportunities</h3><p>Explore doctoral research pathways.</p></div>
+      <div class="card"><h3>Scholarships</h3><p>Find information about funding opportunities.</p></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About StudyBridge</h2>
+    <p>StudyBridge helps students explore higher education opportunities using university and official admissions information.</p>
+    <p>Always confirm deadlines and eligibility on the university's official website.</p>
+  </section>
+
+  <footer>© 2026 StudyBridge. All rights reserved.</footer>
+
+  <script>
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      document.getElementById("searchMessage").textContent =
+        "University search is coming soon.";
+    });
+  </script>
+</body>
+</html>
