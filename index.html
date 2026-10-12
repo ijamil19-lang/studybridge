@@ -341,15 +341,48 @@ const searchTerm = document
   .getElementById("programmeSearch")
   .value.trim().toLowerCase();
 
+
+const selectedSubject =
+  document.getElementById("subjectFilter").value;
+
+const subjectGroups = {
+  accounting: ["accounting", "finance", "financial"],
+  business: ["business", "management", "marketing"],
+  computer: ["computer", "informatics", "software", "data science", "artificial intelligence", "information technology", "ai"],
+  engineering: ["engineering", "technology", "mechanical", "electrical"],
+  medicine: ["medicine", "medical", "health", "nursing", "biomedicine", "vårdvetenskap", "omvårdnadsvetenskap"],
+  economics: ["economics", "economic"],
+  law: ["law", "legal"],
+  education: ["education", "pedagogy", "teaching"],
+  architecture: ["architecture", "built environment"],
+  arts: ["art", "design", "music", "film", "dance", "acting", "textile"],
+  science: ["biology", "chemistry", "physics", "mathematics", "environmental science"],
+  social: ["sociology", "political science", "criminology", "social science"]
+};
+
 const filteredProgrammes = programmes.filter(function(programme) {
-  return [
+  const searchableText = [
     programme.name,
     programme.subject,
     programme.universities?.name
-  ].some(function(value) {
-    return (value || "").toLowerCase().includes(searchTerm);
-  });
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  const matchesKeyword = searchableText.includes(searchTerm);
+
+  if (selectedSubject === "all") {
+    return matchesKeyword;
+  }
+
+  const keywords = subjectGroups[selectedSubject] || [];
+
+  const matchesSubject = selectedSubject === "other"
+    ? !Object.values(subjectGroups).flat()
+        .some(word => searchableText.includes(word))
+    : keywords.some(word => searchableText.includes(word));
+
+  return matchesKeyword && matchesSubject;
 });
+
 
     list.replaceChildren();
 
@@ -412,6 +445,9 @@ card.appendChild(badge);
     list.textContent = "Unable to load programmes: " + error.message;
   }
 }
+
+document.getElementById("subjectFilter")
+  .addEventListener("change", loadProgrammes);
 
 loadProgrammes();
 
