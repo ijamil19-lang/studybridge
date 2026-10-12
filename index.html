@@ -99,6 +99,15 @@
 
       const universities = await response.json();
 
+const searchTerm = document.getElementById("searchInput")
+  .value.trim().toLowerCase();
+
+const filteredUniversities = universities.filter(function(university) {
+  return (university.name || "")
+    .toLowerCase()
+    .includes(searchTerm);
+});
+
      
 const list = document.getElementById("universityList");
 
