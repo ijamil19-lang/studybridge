@@ -505,10 +505,22 @@ const badge = document.createElement("div");
 badge.textContent = "Sweden • 🎓 " +
   (programme.degree_level || "Study Programme");
 
-badge.insertAdjacentHTML(
-  "afterbegin",
-  '<span style="margin-right:6px;">🇸🇪</span>'
-);
+
+const flag = document.createElement("img");
+flag.src = "https://flagcdn.com/w40/se.png";
+flag.alt = "Swedish flag";
+flag.width = 20;
+flag.height = 15;
+flag.style.cssText = `
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: cover;
+  margin-right: 7px;
+  border-radius: 2px;
+`;
+
+badge.prepend(flag);
+
 
 
 badge.style.cssText = `
