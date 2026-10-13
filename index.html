@@ -530,7 +530,12 @@ card.appendChild(badge);
         programme.subject
       ].filter(Boolean).join(" • ");
 
-      card.append(title, university, details);
+     
+university.textContent = "🏛️ " + university.textContent;
+details.textContent = "📚 " + details.textContent;
+
+card.append(title, university, details);
+
 
       if (programme.programme_url &&
           /^https?:\/\//i.test(programme.programme_url)) {
