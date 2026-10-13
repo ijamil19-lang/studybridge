@@ -501,8 +501,15 @@ const filteredProgrammes = programmes.filter(function(programme) {
 
 const badge = document.createElement("div");
 
-badge.textContent = "🇸🇪  Sweden  •  🎓  " +
+
+badge.textContent = "Sweden • 🎓 " +
   (programme.degree_level || "Study Programme");
+
+badge.insertAdjacentHTML(
+  "afterbegin",
+  '<span style="margin-right:6px;">🇸🇪</span>'
+);
+
 
 badge.style.cssText = `
   display: inline-block;
