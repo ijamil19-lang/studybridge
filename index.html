@@ -179,6 +179,50 @@
   font-weight: 600 !important;
 }
 
+/* StudyBridge modern homepage hero */
+
+.hero {
+  position: relative;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 35, 70, 0.94),
+      rgba(20, 65, 110, 0.78)
+    ),
+    url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=85")
+    center / cover no-repeat !important;
+
+  color: #ffffff;
+  padding: 90px 24px !important;
+  text-align: center;
+}
+
+.hero h1 {
+  max-width: 950px;
+  margin: 0 auto 22px;
+  font-size: clamp(32px, 4vw, 58px);
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.hero > p {
+  max-width: 760px;
+  margin: 0 auto 30px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.hero .search {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 65px 20px !important;
+  }
+}
+
   </style>
 </head>
 <body>
