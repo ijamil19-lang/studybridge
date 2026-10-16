@@ -8,7 +8,7 @@ const text=(o,keys)=>String(keys.map(k=>o?.[k]).find(v=>v!==undefined&&v!==null&
 const country=c=>countryNames[c]||c||'Unknown country';
 const cleanURL=value=>{try{const u=new URL(value,location.href);return ['http:','https:'].includes(u.protocol)?u.href:null}catch{return null}};
 const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n};
-async function fetchTable(table,query='select=*&limit=1000'){const response=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{headers:{apikey:SUPABASE_KEY}});if(!response.ok)throw new Error(`Database request failed (${response.status})`);return response.json()}
+async function fetchTable(table,query='select=*&limit=1000',options={}){const response=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{headers:{apikey:SUPABASE_KEY},...options});if(!response.ok)throw new Error(`Database request failed (${response.status})`);return response.json()}
 function addCard(root,{badge,title,lines,link,linkText}){const c=el('article','listing'),main=el('div');if(badge)main.append(el('span','pill',badge));main.append(el('h3','',title||'Untitled listing'));for(const line of lines){if(line)main.append(el('p','',line))}c.append(main);const url=cleanURL(link);if(url){const a=el('a','visit',linkText||'Official website ↗');a.href=url;if(new URL(url).origin!==location.origin){a.target='_blank';a.rel='noopener noreferrer'}c.append(a)}root.append(c)}
 let rows=[],page=1;const perPage=12;let render=()=>{};
 function paginate(filtered,draw){const root=$('results');root.replaceChildren();$('status').textContent=`${filtered.length} ${filtered.length===1?'result':'results'} found`;if(!filtered.length){root.append(el('div','empty','No matching listings found. Try different filters.'));$('pagination').replaceChildren();return}const pages=Math.ceil(filtered.length/perPage);page=Math.min(page,pages);filtered.slice((page-1)*perPage,page*perPage).forEach(draw);const p=$('pagination');p.replaceChildren();if(pages<2)return;const prev=el('button','','← Previous'),next=el('button','','Next →');prev.disabled=page===1;next.disabled=page===pages;prev.onclick=()=>{page--;render();window.scrollTo({top:220,behavior:'smooth'})};next.onclick=()=>{page++;render();window.scrollTo({top:220,behavior:'smooth'})};p.append(prev,el('span','',`Page ${page} of ${pages}`),next)}
@@ -77,7 +77,12 @@ async function setupProgrammeDetail(){
  }
  try{
   const query='select=id,name,degree_level,subject,field,description,duration,study_mode,language,tuition_fee,tuition_currency,international_students,programme_url,application_url,last_verified,universities(name,city,country_code,website_url,admissions_url)&status=eq.active&id=eq.'+encodeURIComponent(id)+'&limit=1';
-  const items=await fetchTable('programmes',query);
+  // Avoid leaving course pages in a loading state if the data service stalls.
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),15000);
+  let items;
+  try{items=await fetchTable('programmes',query,{signal:controller.signal})}
+  finally{clearTimeout(timeout)}
   const r=items?.[0];
   if(!r){
    $('programme-title').textContent='Programme not found';
@@ -119,7 +124,7 @@ async function setupProgrammeDetail(){
   $('programme-detail').setAttribute('aria-busy','false');
  }catch(error){
   $('programme-title').textContent='Unable to load programme';
-  showProgrammeStatus('Programme information is temporarily unavailable. Please refresh or return to programme search.');
+  showProgrammeStatus('Programme information could not be loaded. Refresh the page, or use programme search to open another course.');
  }
 }
 
