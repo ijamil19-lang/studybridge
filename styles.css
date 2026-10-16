@@ -36,3 +36,11 @@
 .programme-record-empty{border:1px dashed #c4d5e7;background:var(--bg);border-radius:10px;padding:16px;font-size:14px;margin-top:12px!important}
 .programme-browse-link{margin-top:16px!important;font-size:14px;font-weight:750}
 .programme-panel[aria-labelledby="regional-scholarships-title"] .programme-smallprint{line-height:1.55}
+
+
+/* International student eligibility indicators */
+.filter-note{font-size:12px;line-height:1.5;color:var(--muted);margin:-3px 0 19px}
+.eligibility-status{display:inline-block;font-size:14px;font-weight:750;line-height:1.4;padding:10px 14px;border-radius:10px;margin:0 0 16px!important;max-width:100%}
+.eligibility-listed{background:#e9f4ef;color:#205b40;border:1px solid #cee6d9}
+.eligibility-restricted{background:#fff2e8;color:#86501f;border:1px solid #f1ddc7}
+.eligibility-unconfirmed{background:#eff3f8;color:#455e76;border:1px solid #d9e2ee}

@@ -14,7 +14,7 @@ let rows=[],page=1;const perPage=12;let render=()=>{};
 function paginate(filtered,draw){const root=$('results');root.replaceChildren();$('status').textContent=`${filtered.length} ${filtered.length===1?'result':'results'} found`;if(!filtered.length){root.append(el('div','empty','No matching listings found. Try different filters.'));$('pagination').replaceChildren();return}const pages=Math.ceil(filtered.length/perPage);page=Math.min(page,pages);filtered.slice((page-1)*perPage,page*perPage).forEach(draw);const p=$('pagination');p.replaceChildren();if(pages<2)return;const prev=el('button','','← Previous'),next=el('button','','Next →');prev.disabled=page===1;next.disabled=page===pages;prev.onclick=()=>{page--;render();window.scrollTo({top:220,behavior:'smooth'})};next.onclick=()=>{page++;render();window.scrollTo({top:220,behavior:'smooth'})};p.append(prev,el('span','',`Page ${page} of ${pages}`),next)}
 function debounce(fn){let timer;return()=>{clearTimeout(timer);timer=setTimeout(()=>{page=1;fn()},220)}}
 function bindInputs(ids){for(const id of ids)$(id).addEventListener(id==='q'?'input':'change',debounce(render))}
-function readParams(){const p=new URLSearchParams(location.search);for(const id of ['q','country','degree','subject'])if($(id)&&p.has(id))$(id).value=p.get(id)}
+function readParams(){const p=new URLSearchParams(location.search);for(const id of ['q','country','degree','subject','international'])if($(id)&&p.has(id))$(id).value=p.get(id)}
 // Page the public catalogue so records beyond the first 1,000 remain searchable.
 async function fetchAllProgrammes(){
  const size=500,all=[];
@@ -27,6 +27,26 @@ async function fetchAllProgrammes(){
  }
  throw new Error('Programme catalogue exceeded the current safety limit');
 }
+function internationalEligibility(value){
+ if(value===true)return {
+  kind:'listed',
+  label:'Listed as accepting international applicants',
+  listText:'International students: listed as accepting applications (check university eligibility)',
+  explanation:'This programme is recorded as accepting international applicants. Your eligibility may depend on nationality, qualifications, English-language evidence, intake and visa requirements. Confirm with the university.'
+ };
+ if(value===false)return {
+  kind:'restricted',
+  label:'International applicant restrictions recorded',
+  listText:'International students: restrictions reported (check university)',
+  explanation:'This programme is not currently recorded as generally accepting international applicants. Exceptions and requirements may apply; verify directly with the university.'
+ };
+ return {
+  kind:'unconfirmed',
+  label:'International student eligibility not yet confirmed',
+  listText:'International students: eligibility not yet confirmed',
+  explanation:'There is not enough confirmed information to state whether this programme accepts international applications. Ask the university about your nationality, entry qualifications and visa requirements.'
+ };
+}
 function courseDetails(r){
  const info=[r.universities?.name,r.subject||r.field];
  const fee=Number(r.tuition_fee);
@@ -36,16 +56,10 @@ function courseDetails(r){
  }else{
   info.push('Tuition fees: check official university website');
  }
- if(r.international_students===true){
-  info.push('International applicants: check programme entry requirements');
- }else if(r.international_students===false){
-  info.push('International applicants: confirm restrictions with university');
- }else{
-  info.push('International eligibility: not yet confirmed');
- }
+ info.push(internationalEligibility(r.international_students).listText);
  return info;
 }
-function setupSearch(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value,d=$('degree').value,s=$('subject').value;const filtered=rows.filter(r=>{const u=r.universities||{};if(ct!=='all'&&u.country_code!==ct)return false;if(d!=='all'&&r.degree_level!==d)return false;const words=[r.name,r.subject,r.field,u.name].filter(Boolean).join(' ').toLowerCase();if(!words.includes(q))return false;if(s==='all')return true;const relevant=[r.name,r.subject,r.field].filter(Boolean).join(' ').toLowerCase();const match=k=>new RegExp('(^|[^a-z])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)','i').test(relevant);const keywords=subjectGroups[s]||[];return s==='other'?!Object.values(subjectGroups).flat().some(match):keywords.some(match)});if($('sort').value==='university')filtered.sort((a,b)=>(a.universities?.name||'').localeCompare(b.universities?.name||''));paginate(filtered,r=>addCard($('results'),{badge:`${country(r.universities?.country_code)} · ${r.degree_level||'Programme'}`,title:r.name,lines:courseDetails(r),link:'programme.html?id='+encodeURIComponent(r.id),linkText:'View programme details →'}))};bindInputs(['q','country','degree','subject','sort']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';$('degree').value='all';$('subject').value='all';page=1;render()};fetchAllProgrammes().then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load programmes. Check database permissions and try refreshing.'))})}
+function setupSearch(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value,d=$('degree').value,s=$('subject').value,international=$('international').value;const filtered=rows.filter(r=>{const u=r.universities||{};if(ct!=='all'&&u.country_code!==ct)return false;if(d!=='all'&&r.degree_level!==d)return false;if(international==='listed'&&r.international_students!==true)return false;if(international==='restricted'&&r.international_students!==false)return false;if(international==='unconfirmed'&&r.international_students!=null)return false;const words=[r.name,r.subject,r.field,u.name].filter(Boolean).join(' ').toLowerCase();if(!words.includes(q))return false;if(s==='all')return true;const relevant=[r.name,r.subject,r.field].filter(Boolean).join(' ').toLowerCase();const match=k=>new RegExp('(^|[^a-z])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)','i').test(relevant);const keywords=subjectGroups[s]||[];return s==='other'?!Object.values(subjectGroups).flat().some(match):keywords.some(match)});if($('sort').value==='university')filtered.sort((a,b)=>(a.universities?.name||'').localeCompare(b.universities?.name||''));paginate(filtered,r=>addCard($('results'),{badge:`${country(r.universities?.country_code)} · ${r.degree_level||'Programme'}`,title:r.name,lines:courseDetails(r),link:'programme.html?id='+encodeURIComponent(r.id),linkText:'View programme details →'}))};bindInputs(['q','country','degree','subject','international','sort']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';$('degree').value='all';$('subject').value='all';$('international').value='all';page=1;render()};fetchAllProgrammes().then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load programmes. Check database permissions and try refreshing.'))})}
 function setupUniversities(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value;const filtered=rows.filter(r=>(ct==='all'||r.country_code===ct)&&[r.name,r.city,country(r.country_code)].join(' ').toLowerCase().includes(q));paginate(filtered,r=>addCard($('results'),{badge:country(r.country_code),title:r.name,lines:[r.city,r.description?.slice(0,190)],link:r.website_url||r.admissions_url}))};bindInputs(['q','country']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';page=1;render()};fetchTable('universities','select=*&order=name.asc&limit=1000').then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load universities. Check database permissions and try refreshing.'))})}
 const config={scholarships:{name:'Scholarships',table:'scholarships',title:['name','title','scholarship_name'],badge:['type','funding_type','degree_level'],details:[['provider','organization','university_name'],['deadline','application_deadline','closing_date'],['description','eligibility']],links:['scholarship_url','official_url','website_url','application_url','url']},admissions:{name:'Admissions & deadlines',table:'admissions',title:['programme_name','name','title','intake'],badge:['intake','academic_year','status'],details:[['university_name','university','institution'],['application_deadline','deadline','closing_date'],['degree_level','requirements','description']],links:['admissions_url','application_url','official_url','source_url','url']},phd:{name:'PhD research positions',table:'phd_positions',title:['title','position_title','name','research_area'],badge:['research_area','field','status'],details:[['university_name','university','department'],['deadline','application_deadline','closing_date'],['description','funding']],links:['position_url','application_url','official_url','source_url','url']}};
 function setupOpportunities(){const kind=new URLSearchParams(location.search).get('type');const c=config[kind]||config.scholarships;$('heading').textContent=c.name;$('subheading').textContent=c.name;document.title=`${c.name} | StudyBridge`;render=()=>{const q=$('q').value.trim().toLowerCase();const filtered=rows.filter(r=>Object.values(r).filter(v=>typeof v==='string'||typeof v==='number').join(' ').toLowerCase().includes(q));paginate(filtered,r=>addCard($('results'),{badge:text(r,c.badge)||c.name,title:text(r,c.title)||'Opportunity',lines:c.details.map(keys=>text(r,keys)).filter(Boolean).map(v=>v.slice(0,190)),link:text(r,c.links)}))};bindInputs(['q']);$('reset').onclick=()=>{$('q').value='';page=1;render()};fetchTable(c.table).then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load these listings. They may not be publicly accessible yet.'))})}
@@ -213,11 +227,11 @@ async function setupProgrammeDetail(){
    ?(String(r.tuition_currency||'').trim()+' '+fee.toLocaleString('en-GB',{maximumFractionDigits:2})).trim()+' (confirm fee category and year)'
    :'Check official university website; no confirmed fee is listed';
   detailFact(facts,'Tuition fees',feeValue);
-  $('programme-international').textContent=r.international_students===true
-   ?'International applications may be considered. Confirm eligibility and visa requirements with the university.'
-   :r.international_students===false
-    ?'International student eligibility may be restricted. Confirm directly with the university.'
-    :'International student eligibility has not been confirmed for this programme.';
+  const eligibility=internationalEligibility(r.international_students);
+  const eligibilityLabel=$('programme-international-status');
+  eligibilityLabel.textContent=eligibility.label;
+  eligibilityLabel.className='eligibility-status eligibility-'+eligibility.kind;
+  $('programme-international').textContent=eligibility.explanation;
   const reviewed=r.last_verified?new Date(r.last_verified):null;
   if(reviewed&&!Number.isNaN(reviewed.getTime())){
    $('programme-verified').textContent='StudyBridge record last checked: '+reviewed.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'. Details may have changed.';
