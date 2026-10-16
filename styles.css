@@ -25,3 +25,14 @@
 .listing .visit{height:max-content}
 @media(max-width:800px){.programme-layout{grid-template-columns:1fr}.programme-panel{padding:20px}}
 @media(max-width:480px){.programme-facts{grid-template-columns:1fr}.programme-facts dt{border:0;padding-bottom:1px}.programme-facts dd{padding-top:0}}
+
+
+/* Admissions and scholarships detail panels */
+.programme-record{border:1px solid var(--line);background:#fbfdff;border-radius:12px;padding:17px 18px;margin-top:13px}
+.programme-record h3{font-size:16px;line-height:1.4;margin:0 0 10px;color:var(--navy)}
+.programme-record .programme-record-detail{font-size:14px;line-height:1.5;margin:5px 0;color:#4e647b}
+.programme-record-link{display:inline-block;margin-top:10px;font-size:14px;font-weight:750;text-decoration:none}
+.programme-record-link:hover{text-decoration:underline}
+.programme-record-empty{border:1px dashed #c4d5e7;background:var(--bg);border-radius:10px;padding:16px;font-size:14px;margin-top:12px!important}
+.programme-browse-link{margin-top:16px!important;font-size:14px;font-weight:750}
+.programme-panel[aria-labelledby="regional-scholarships-title"] .programme-smallprint{line-height:1.55}

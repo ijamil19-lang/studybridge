@@ -68,6 +68,113 @@ function detailFact(root,label,value){
  const dt=el('dt','',label),dd=el('dd','',value);
  root.append(dt,dd);
 }
+
+/* Supplementary course-specific admissions and country-level scholarship leads.
+   These sections never assert that funding or an application window is currently available. */
+async function fetchProgrammeExtra(table,query){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),12000);
+ try{return await fetchTable(table,query,{signal:controller.signal})}
+ finally{clearTimeout(timer)}
+}
+function reportedDate(value){
+ const v=String(value||'');
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return 'Not recorded';
+ const d=new Date(v+'T00:00:00Z');
+ return Number.isNaN(d.getTime())?'Not recorded':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+}
+function reviewedDate(value){
+ if(!value)return 'Not recorded';
+ const d=new Date(value);
+ return Number.isNaN(d.getTime())?'Not recorded':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+}
+function recordLine(parent,description){
+ if(description)parent.append(el('p','programme-record-detail',description));
+}
+function recordLink(parent,url,label){
+ const safe=cleanURL(url);
+ if(!safe)return;
+ const link=el('a','programme-record-link',label);
+ link.href=safe;
+ link.target='_blank';
+ link.rel='noopener noreferrer';
+ parent.append(link);
+}
+async function loadProgrammeAdmissions(programmeId){
+ const root=$('programme-admission-records');
+ if(!root)return;
+ try{
+  const query='select=id,intake,academic_year,application_open,application_deadline,international_deadline,application_url,status,last_verified&programme_id=eq.'+encodeURIComponent(programmeId)+'&order=application_deadline.desc.nullslast&limit=30';
+  const records=await fetchProgrammeExtra('admissions',query);
+  root.replaceChildren();
+  if(!Array.isArray(records)||records.length===0){
+   root.append(el('p','programme-record-empty','No programme-specific admission dates are recorded yet. Check the official university application page for the next intake.'));
+   return;
+  }
+  const today=new Date().toISOString().slice(0,10);
+  const current=records.filter(a=>a.status!=='closed'&&(!a.application_deadline||a.application_deadline>=today));
+  const old=records.filter(a=>!current.includes(a));
+  const show=[...current.slice(0,3),...old.slice(0,Math.max(0,3-current.length))];
+  for(const item of show){
+   const card=el('article','programme-record');
+   card.append(el('h3','',item.intake||item.academic_year||'Reported application session'));
+   const deadline=String(item.application_deadline||'');
+   let status='Application status not confirmed; check the university.';
+   if(deadline&&deadline<today)status='Historical deadline (already passed) — not currently open.';
+   else if(item.status==='closed')status='Recorded as closed; check for a new cycle.';
+   else if(deadline)status='Future date in the database; opening status must be confirmed.';
+   recordLine(card,status);
+   recordLine(card,'Application deadline: '+reportedDate(item.application_deadline));
+   if(item.international_deadline)recordLine(card,'International deadline: '+reportedDate(item.international_deadline));
+   if(item.application_open)recordLine(card,'Reported opening date: '+reportedDate(item.application_open));
+   if(item.academic_year)recordLine(card,'Academic year: '+item.academic_year);
+   recordLine(card,'Last checked: '+reviewedDate(item.last_verified));
+   recordLink(card,item.application_url,'Open university admissions information ↗');
+   root.append(card);
+  }
+  if(records.length>show.length)root.append(el('p','programme-smallprint','Showing '+show.length+' of '+records.length+' recorded application sessions. Check the university for other dates.'));
+ }catch(error){
+  root.replaceChildren(el('p','programme-record-empty','Admission records could not be loaded. Please use the official university application link.'));
+ }
+}
+async function loadProgrammeScholarships(code,level){
+ const root=$('programme-scholarship-records');
+ if(!root)return;
+ if(!/^[A-Z]{2}$/.test(String(code||''))){
+  root.replaceChildren(el('p','programme-record-empty','Scholarship opportunities cannot be matched without a confirmed study destination.'));
+  return;
+ }
+ try{
+  const countries=await fetchProgrammeExtra('countries','select=id&code=eq.'+encodeURIComponent(code)+'&limit=1');
+  if(!Array.isArray(countries)||!countries.length)throw Error('No linked country');
+  const query='select=id,name,provider,degree_level,funding_type,deadline,status,last_verified,official_url&country_id=eq.'+countries[0].id+'&order=deadline.asc.nullslast&limit=100';
+  const results=await fetchProgrammeExtra('scholarships',query);
+  const today=new Date().toISOString().slice(0,10);
+  // Exact reported degree category, rather than guessing that "Other" means all degrees.
+  const matches=(Array.isArray(results)?results:[]).filter(s=>
+   s.degree_level===level&&s.status!=='closed'&&(!s.deadline||s.deadline>=today)&&cleanURL(s.official_url)
+  ).slice(0,4);
+  root.replaceChildren();
+  if(!matches.length){
+   root.append(el('p','programme-record-empty','No non-expired scholarship leads are currently listed for this destination and degree category. This does not mean that no funding exists.'));
+   return;
+  }
+  for(const item of matches){
+   const card=el('article','programme-record');
+   card.append(el('h3','',item.name||'Scholarship opportunity'));
+   if(item.provider)recordLine(card,'Provider: '+item.provider);
+   if(item.funding_type)recordLine(card,'Reported funding: '+item.funding_type);
+   recordLine(card,'Recorded deadline: '+reportedDate(item.deadline));
+   recordLine(card,'Last checked: '+reviewedDate(item.last_verified));
+   recordLine(card,'University/course and applicant eligibility are not verified for this programme.');
+   recordLink(card,item.official_url,'Check official scholarship criteria ↗');
+   root.append(card);
+  }
+ }catch(error){
+  root.replaceChildren(el('p','programme-record-empty','Scholarship listings could not be loaded. Please browse the full scholarship list.'));
+ }
+}
+
 async function setupProgrammeDetail(){
  const id=new URLSearchParams(location.search).get('id');
  if(!id||!/^[1-9]\d{0,14}$/.test(id)){
@@ -122,6 +229,9 @@ async function setupProgrammeDetail(){
   $('programme-sidebar').hidden=false;
   $('programme-status').textContent='';
   $('programme-detail').setAttribute('aria-busy','false');
+  // Secondary panels can fail independently without hiding the main programme details.
+  void loadProgrammeAdmissions(r.id);
+  void loadProgrammeScholarships(u.country_code,r.degree_level);
  }catch(error){
   $('programme-title').textContent='Unable to load programme';
   showProgrammeStatus('Programme information could not be loaded. Refresh the page, or use programme search to open another course.');
