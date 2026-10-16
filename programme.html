@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="View course details, entry information and official university links on StudyBridge.">
+  <title>Programme details | StudyBridge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+  <a class="logo" href="index.html"><span class="logo-mark">🎓</span>Study<span>Bridge</span></a>
+  <button class="menu" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <nav id="nav">
+    <a href="search.html">Programmes</a><a href="universities.html">Universities</a>
+    <a href="opportunities.html?type=scholarships">Scholarships</a>
+    <a href="opportunities.html?type=admissions">Admissions</a>
+    <a href="opportunities.html?type=phd">PhD positions</a>
+  </nav>
+</div></header>
+<main>
+  <section class="pagehead detail-hero"><div class="wrap">
+    <a class="crumb" href="search.html">← Back to programme search</a>
+    <p id="programme-label" class="detail-eyebrow">PROGRAMME DETAILS</p>
+    <h1 id="programme-title">Loading programme…</h1>
+    <p id="programme-university">Checking available information</p>
+  </div></section>
+  <div class="wrap programme-layout" id="programme-detail" aria-busy="true">
+    <div class="programme-main">
+      <p id="programme-status" role="status">Loading course information…</p>
+      <div id="programme-content" hidden>
+        <section class="programme-panel">
+          <h2>About this programme</h2>
+          <p id="programme-description"></p>
+        </section>
+        <section class="programme-panel">
+          <h2>Course information</h2>
+          <dl class="programme-facts" id="programme-facts"></dl>
+        </section>
+        <section class="programme-panel">
+          <h2>International applicants and admissions</h2>
+          <p id="programme-international"></p>
+          <p id="programme-requirements">Programme-specific entry requirements and English-language requirements have not been confirmed here. Check the official university course page before applying.</p>
+          <p class="programme-smallprint">Application deadlines and available intakes can change. StudyBridge does not currently confirm a deadline for this programme.</p>
+        </section>
+      </div>
+    </div>
+    <aside class="programme-aside" id="programme-sidebar" hidden>
+      <section class="programme-panel programme-actions-panel">
+        <h2>Official links</h2>
+        <a class="detail-button" id="programme-official" target="_blank" rel="noopener noreferrer" hidden>View official course page ↗</a>
+        <a class="detail-button detail-button-secondary" id="programme-apply" target="_blank" rel="noopener noreferrer" hidden>University application page ↗</a>
+        <a class="detail-text-link" id="programme-university-site" target="_blank" rel="noopener noreferrer" hidden>Visit university website ↗</a>
+        <p class="programme-smallprint">You will leave StudyBridge when opening official university websites.</p>
+      </section>
+      <section class="programme-panel programme-note">
+        <h2>Before you apply</h2>
+        <p>Confirm tuition fees for your fee category, qualifications, English-language requirements, available intakes and deadlines directly with the university.</p>
+        <p id="programme-verified" class="programme-smallprint"></p>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer><div class="wrap foot"><div><b>🎓 StudyBridge</b><p>Explore your future with official university links.</p></div><div><a href="search.html">Find programmes</a><a href="universities.html">Universities</a><a href="privacy.html">Privacy policy</a></div></div><div class="wrap footnote">© 2026 StudyBridge · Always verify fees, eligibility and deadlines with official sources.</div></footer>
+<script src="app.js" defer></script>
+</body>
+</html>
