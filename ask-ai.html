@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Ask StudyBridge AI to find study programmes in your preferred country based on your interests and qualifications.">
 <title>Ask AI — Find a suitable course | StudyBridge</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ask-ai.css">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ask-ai.css?v=20261017-conversation-1">
 </head>
 <body>
 <header class="top"><div class="wrap nav">
@@ -42,18 +42,27 @@
 </div>
 <label for="notes">Any other preferences? <span class="optional">(optional)</span>
 <textarea id="notes" rows="2" maxlength="220" placeholder="e.g. English-taught programme, budget around £12,000 per year"></textarea></label>
-<p class="ask-privacy">Don't include contact details, passport numbers or other sensitive information. Your question is sent to an AI service for matching; StudyBridge doesn't save it as a student profile.</p>
+<p class="ask-privacy">Don't include contact details, passport numbers or other sensitive information. Your questions and recent conversation context are sent to an AI service for matching. The conversation stays in this browser tab and is not saved by StudyBridge as a student profile.</p>
 <button id="ask-submit" class="ask-submit" type="submit">✨ Find suitable courses</button>
 </form>
 </section>
 <section class="ask-results-panel" aria-labelledby="ask-results-title">
 <div class="ask-results-top"><h2 id="ask-results-title">Your suggested courses</h2><p id="ask-status" role="status" aria-live="polite">Complete the form to see suggestions.</p></div>
 <div id="ask-answer" class="ask-answer" hidden></div>
+<section id="ask-chat" class="ask-chat" aria-labelledby="ask-chat-heading" hidden>
+<div class="ask-chat-top"><h3 id="ask-chat-heading">Your AI conversation</h3><button type="button" id="ask-new-search" class="ask-new-search">Start new search</button></div>
+<div id="ask-messages" class="ask-messages" aria-live="polite" aria-relevant="additions"></div>
+<form id="ask-followup-form" class="ask-followup-form">
+<label for="ask-followup">Ask a follow-up question</label>
+<textarea id="ask-followup" maxlength="500" minlength="5" rows="2" required placeholder="e.g. Compare the first two courses, or find more options related to AI."></textarea>
+<div class="ask-followup-actions"><span>Suggestions are based on published course details, not guaranteed eligibility.</span><button type="submit" id="ask-followup-submit">Send →</button></div>
+</form>
+</section>
 <div id="ask-results" class="ask-results"><div class="ask-empty">Your AI recommendations will appear here. You'll be able to open each programme and check its official university course page.</div></div>
 <p id="ask-disclaimer" class="ask-disclaimer" hidden>AI suggestions are for research only. StudyBridge cannot confirm individual admission, international eligibility, fees, visas or deadlines. Check each university's official requirements before applying.</p>
 </section>
 </div>
 </main>
 <footer><div class="wrap foot"><div><b>🎓 StudyBridge</b><p>Explore your future with official university links.</p></div><div><a href="search.html">Find programmes</a><a href="universities.html">Universities</a><a href="privacy.html">Privacy policy</a></div></div><div class="wrap footnote">© 2026 StudyBridge · Always verify fees, eligibility and deadlines with official sources.</div></footer>
-<script src="app.js" defer></script><script src="ask-ai.js" defer></script>
+<script src="app.js" defer></script><script src="ask-ai.js?v=20261017-conversation-1" defer></script>
 </body></html>
