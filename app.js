@@ -296,6 +296,24 @@ async function setupProgrammeDetail(){
   $('programme-label').textContent=(r.degree_level||'Programme')+' · '+country(u.country_code);
   $('programme-university').textContent=[u.name,u.city].filter(Boolean).join(' · ');
   document.title=(r.name||'Programme details')+' | StudyBridge';
+  // Google may render these dynamic course pages. Keep the canonical tied to
+  // the exact published record, not to the shared programme.html template.
+  const canonical=new URL('programme.html?id='+encodeURIComponent(r.id),location.href).href;
+  let canonicalTag=document.querySelector('link[rel="canonical"]');
+  if(!canonicalTag){canonicalTag=document.createElement('link');canonicalTag.rel='canonical';document.head.append(canonicalTag);}
+  canonicalTag.href=canonical;
+  const summary=(r.name+' at '+(u.name||'the university')+' in '+country(u.country_code)+'. Explore degree details, study language and official admission links.').slice(0,155);
+  const updateMeta=(selector,attr,value)=>{
+    let tag=document.head.querySelector(selector);
+    if(!tag){tag=document.createElement('meta');tag.setAttribute(attr,selector.startsWith('meta[property=')?selector.match(/"([^"]+)"/)?.[1]:'description');document.head.append(tag);}
+    tag.content=value;
+  };
+  updateMeta('meta[name="description"]','name',summary);
+  for(const [property,value] of [['og:title',document.title],['og:description',summary],['og:url',canonical]]){
+    let node=document.head.querySelector('meta[property="'+property+'"]');
+    if(!node){node=document.createElement('meta');node.setAttribute('property',property);document.head.append(node);}
+    node.content=value;
+  }
   $('programme-description').textContent=formatProgrammeText(r.description,'Visit the official university course page for a detailed course description.');
   const facts=$('programme-facts');
   detailFact(facts,'Qualification',r.degree_level||'Check university website');
