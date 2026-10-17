@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ask StudyBridge AI to find study programmes in your preferred country based on your interests and qualifications.">
+<title>Ask AI — Find a suitable course | StudyBridge</title>
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ask-ai.css">
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+<a class="logo" href="index.html"><span class="logo-mark">🎓</span>Study<span>Bridge</span></a>
+<button class="menu" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+<nav id="nav"><a href="search.html">Programmes</a><a href="universities.html">Universities</a><a href="opportunities.html?type=scholarships">Scholarships</a><a href="opportunities.html?type=admissions">Admissions</a><a href="opportunities.html?type=phd">PhD positions</a><a href="ask-ai.html" aria-current="page">✨ Ask AI</a></nav>
+</div></header>
+<main>
+<section class="pagehead ask-head"><div class="wrap"><a class="crumb" href="index.html">← Home</a><span class="ask-tag">✨ STUDYBRIDGE AI COURSE FINDER</span><h1>Ask AI to find your ideal course</h1><p>Tell us where you want to study and what you're interested in. We'll suggest matching programmes from our published university catalogue.</p></div></section>
+<div class="wrap ask-layout">
+<section class="ask-form-panel" aria-labelledby="ask-form-title">
+<h2 id="ask-form-title">Tell us about your study plans</h2>
+<form id="ask-form">
+<div class="ask-fields">
+<label for="country">Country you want to study in <span class="required">*</span>
+<select id="country" name="country" required>
+<option value="">Choose a country</option>
+<option value="CA">Canada</option><option value="FI">Finland</option><option value="HU">Hungary</option>
+<option value="IT">Italy</option><option value="LT">Lithuania</option><option value="RO">Romania</option>
+<option value="ES">Spain</option><option value="SE">Sweden</option>
+<option value="GB">United Kingdom</option><option value="US">United States</option>
+</select></label>
+<label for="degree">Preferred degree level
+<select id="degree" name="degree">
+<option value="all">Any level</option><option value="Bachelor">Bachelor's</option><option value="Certificate">Certificate</option><option value="Diploma">Diploma</option><option value="Foundation">Foundation</option><option value="Master">Master's</option><option value="Other">Other</option><option value="PhD">PhD</option>
+</select></label>
+</div>
+<label for="question">What would you like to study? <span class="required">*</span>
+<textarea id="question" name="question" rows="4" required minlength="8" maxlength="500" placeholder="For example: I'm interested in cybersecurity and software engineering. I want a course that could help me work as a security analyst."></textarea></label>
+<div class="ask-fields">
+<label for="qualification">Your current qualification <span class="optional">(optional)</span>
+<input id="qualification" maxlength="180" placeholder="e.g. BSc Computer Science"></label>
+<label for="nationality">Your nationality <span class="optional">(optional)</span>
+<input id="nationality" maxlength="70" placeholder="e.g. Pakistani"></label>
+</div>
+<label for="notes">Any other preferences? <span class="optional">(optional)</span>
+<textarea id="notes" rows="2" maxlength="220" placeholder="e.g. English-taught programme, budget around £12,000 per year"></textarea></label>
+<p class="ask-privacy">Don't include contact details, passport numbers or other sensitive information. Your question is sent to an AI service for matching; StudyBridge doesn't save it as a student profile.</p>
+<button id="ask-submit" class="ask-submit" type="submit">✨ Find suitable courses</button>
+</form>
+</section>
+<section class="ask-results-panel" aria-labelledby="ask-results-title">
+<div class="ask-results-top"><h2 id="ask-results-title">Your suggested courses</h2><p id="ask-status" role="status" aria-live="polite">Complete the form to see suggestions.</p></div>
+<div id="ask-answer" class="ask-answer" hidden></div>
+<div id="ask-results" class="ask-results"><div class="ask-empty">Your AI recommendations will appear here. You'll be able to open each programme and check its official university course page.</div></div>
+<p id="ask-disclaimer" class="ask-disclaimer" hidden>AI suggestions are for research only. StudyBridge cannot confirm individual admission, international eligibility, fees, visas or deadlines. Check each university's official requirements before applying.</p>
+</section>
+</div>
+</main>
+<footer><div class="wrap foot"><div><b>🎓 StudyBridge</b><p>Explore your future with official university links.</p></div><div><a href="search.html">Find programmes</a><a href="universities.html">Universities</a><a href="privacy.html">Privacy policy</a></div></div><div class="wrap footnote">© 2026 StudyBridge · Always verify fees, eligibility and deadlines with official sources.</div></footer>
+<script src="app.js" defer></script><script src="ask-ai.js" defer></script>
+</body></html>

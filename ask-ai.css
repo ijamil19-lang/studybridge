@@ -1,0 +1,41 @@
+/* StudyBridge Ask AI course finder */
+.ask-head{background:linear-gradient(110deg,#102a4e,#1a5386);padding:48px 0 55px}
+.ask-head h1{max-width:830px}
+.ask-head p{max-width:770px;line-height:1.6;margin-top:12px}
+.ask-tag{display:block;font-size:12px;letter-spacing:1.5px;font-weight:850;color:#ffe0a0;margin-top:26px}
+.ask-layout{display:grid;grid-template-columns:minmax(290px,.9fr) minmax(0,1.1fr);gap:25px;padding:40px 0 85px;align-items:start}
+.ask-form-panel,.ask-results-panel{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 20px #102a4c0a;padding:27px;min-width:0}
+.ask-form-panel h2,.ask-results-panel h2{margin:0 0 18px;font-size:23px;line-height:1.3}
+.ask-form-panel form>label,.ask-fields label{display:block;font-weight:750;font-size:13px;margin:0 0 19px}
+.ask-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ask-form-panel input,.ask-form-panel select,.ask-form-panel textarea{display:block;margin-top:8px;width:100%;color:var(--text);font:inherit;font-size:15px;border:1px solid #cedae7;background:white;border-radius:9px;padding:12px;outline-offset:2px}
+.ask-form-panel textarea{resize:vertical;min-height:65px}
+.ask-form-panel input:focus,.ask-form-panel select:focus,.ask-form-panel textarea:focus{border-color:#1769b1}
+.required{color:#a63c29}.optional{font-weight:400;color:var(--muted)}
+.ask-privacy,.ask-disclaimer{font-size:13px;color:var(--muted);line-height:1.55}
+.ask-privacy{margin:3px 0 18px}
+.ask-submit{border:0;border-radius:10px;background:#1769b1;color:white;font-weight:800;font-size:15px;padding:15px 20px;cursor:pointer;width:100%}
+.ask-submit:hover{background:#0f4d84}.ask-submit:disabled{opacity:.65;cursor:wait}
+.ask-results-top p{font-size:14px;color:var(--muted);margin:-7px 0 18px}
+.ask-results-top p.ask-error{color:#9c3526}
+.ask-answer{background:#eef5fb;border-left:3px solid #1769b1;padding:14px 16px;border-radius:8px;font-size:14px;line-height:1.65;margin:0 0 16px}
+.ask-results{display:grid;gap:15px}
+.ask-empty,.ask-loading{border:1px dashed #c4d5e7;border-radius:12px;background:#f4f7fb;padding:23px;font-size:14px;color:var(--muted);line-height:1.65}
+.ask-card{border:1px solid #d7e3ef;border-radius:13px;padding:20px;background:#fff}
+.ask-card h3{font-size:18px;line-height:1.4;margin:12px 0 6px}
+.ask-card p{font-size:14px;line-height:1.55;margin:7px 0}
+.ask-card-top{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.ask-degree,.ask-eligibility{font-size:12px;border-radius:20px;padding:5px 9px;font-weight:750;line-height:1.35}
+.ask-degree{background:#eaf2fc;color:#205b94}
+.ask-listed{background:#e9f4ef;color:#205b40}
+.ask-unconfirmed{background:#eff3f8;color:#455e76}
+.ask-restricted{background:#fff2e8;color:#86501f}
+.ask-university,.ask-subject{color:var(--muted)}
+.ask-reason{color:#324d69}
+.ask-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.ask-detail,.ask-official{font-size:13px;font-weight:800;text-decoration:none}
+.ask-detail{color:#1769b1}.ask-official{color:#395b7c}
+.ask-detail:hover,.ask-official:hover{text-decoration:underline}
+.ask-disclaimer{margin:18px 0 0}
+@media(max-width:930px){.ask-layout{grid-template-columns:1fr;gap:20px}}
+@media(max-width:530px){.ask-layout{padding-top:20px}.ask-fields{grid-template-columns:1fr;gap:0}.ask-form-panel,.ask-results-panel{padding:20px}.ask-head{padding:30px 0 40px}}
