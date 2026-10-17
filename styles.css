@@ -72,3 +72,143 @@
 .listing p.course-international-listed{color:#215b40;background:#eaf5ee}
 .listing p.course-international-unconfirmed{color:#455e76;background:#eef3f8}
 .listing p.course-international-restricted{color:#87501e;background:#fff2e8}
+
+
+/* StudyBridge visual refresh — programme discovery (October 2026) */
+.programme-search-page{background:#f6f9fd}
+.programme-search-page .search-pagehead{
+ background:radial-gradient(circle at 85% 15%,rgba(70,151,216,.19),transparent 42%),linear-gradient(112deg,#10345d,#173b66 67%,#1a4675);
+ padding:30px 0 41px;
+}
+.search-pagehead .crumb{display:inline-flex;align-items:center;min-height:30px;font-weight:650;color:#caddf2}
+.search-eyebrow{display:block;margin-top:12px;color:#ffce72;font-weight:850;letter-spacing:1.8px;font-size:11px}
+.search-pagehead h1{letter-spacing:-1.4px;margin:8px 0 9px;font-size:clamp(32px,3.5vw,45px)}
+.search-pagehead p{max-width:750px;line-height:1.65;font-size:15px}
+.programme-search-page .result-layout{
+ background:transparent;grid-template-columns:295px minmax(0,1fr);gap:27px;
+ padding-top:28px;padding-bottom:76px;
+}
+.programme-search-page .filterbox{
+ background:#fff;border-radius:17px;border:1px solid #dde7f2;
+ padding:24px;box-shadow:0 8px 26px #123a6410;
+ max-height:calc(100vh - 35px);overflow:auto;
+}
+.filterbox-intro{padding-bottom:15px;border-bottom:1px solid #e6edf5;margin-bottom:21px}
+.filterbox-intro h2{margin:0;font-size:21px;letter-spacing:-.4px}
+.filterbox-intro p{color:#657b92;font-size:13px;margin:5px 0 0}
+.programme-search-page .filterbox label{font-size:13px;font-weight:800;color:#203d5d;margin-bottom:17px}
+.programme-search-page .filterbox input,.programme-search-page .filterbox select{
+ border-color:#cbd9e8;border-radius:10px;box-shadow:0 1px 2px #123a6405;
+ padding:12px 13px;font-size:14px;font-weight:550;
+}
+.programme-search-page .filterbox input:focus,.programme-search-page .filterbox select:focus,
+.programme-search-page .sort select:focus{outline:3px solid #b7d7f4;outline-offset:1px;border-color:#287bb8}
+.programme-search-page .filter-note{margin:0 0 17px}
+.programme-search-page .reset{border-radius:10px;font-size:14px}
+.programme-search-page .reset:hover{background:#dfedfa}
+.programme-search-page .result-top{margin-bottom:16px;padding:2px 0 1px}
+.programme-search-page .result-top h2{font-size:clamp(22px,2.4vw,27px);letter-spacing:-.65px}
+.programme-search-page .result-top #status{margin-top:3px;font-size:14px;color:#496681;font-weight:700}
+.programme-search-page .sort{color:#31516f;font-size:12px}
+.programme-search-page .sort select{padding:10px 13px;background:#fff;border-radius:10px;font-size:14px;font-weight:700}
+
+.search-ask-banner{display:flex;align-items:center;gap:14px;padding:15px 17px;margin-bottom:17px;
+ background:linear-gradient(105deg,#e9f2fc,#f3f8fe);border:1px solid #d4e4f5;border-radius:14px}
+.search-ask-icon{display:flex;align-items:center;justify-content:center;flex:none;width:43px;height:43px;
+ border-radius:12px;background:#fff;box-shadow:0 3px 10px #123a640e;font-size:23px}
+.search-ask-copy{min-width:0;flex:1}
+.search-ask-copy strong{color:#153758;font-size:14px}
+.search-ask-copy p{margin:2px 0 0;color:#59728b;font-size:12px;line-height:1.55}
+.search-ask-link{background:#133f70;color:white;font-weight:850;font-size:13px;text-decoration:none;
+ padding:11px 16px;border-radius:9px;white-space:nowrap}
+.search-ask-link:hover{background:#0f3154;color:white}
+.search-ask-link:focus-visible{outline:3px solid #b7d7f4;outline-offset:3px}
+.active-filters{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 17px}
+.active-filters[hidden]{display:none}
+.filter-chip-caption{font-size:12px;color:#526c85;font-weight:750}
+.filter-chip{border:1px solid #cbdcf0;background:#eaf3fd;color:#1a527d;border-radius:25px;
+ padding:6px 10px;max-width:100%;overflow-wrap:anywhere;text-align:left;font-size:12px;font-weight:750;cursor:pointer}
+.filter-chip:hover{background:#dbeafa}
+.filter-chip-clear{border:0;background:transparent;color:#1b5e93;text-decoration:underline;
+ text-underline-offset:3px;font-size:12px;font-weight:750;cursor:pointer;padding:7px}
+
+.programme-search-page .result-list{gap:17px}
+.programme-search-page .programme-card{
+ display:block;padding:0;overflow:hidden;background:#fff;border:1px solid #dce7f2;
+ border-radius:16px;box-shadow:0 4px 16px #13375c09;
+ transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.programme-search-page .programme-card:hover{border-color:#bdd5ed;box-shadow:0 10px 28px #153b6414;transform:translateY(-1px)}
+.programme-card-body{padding:21px 24px 19px}
+.programme-card-tags{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.programme-card-tags .pill{font-size:11px;font-weight:850;padding:5px 10px;line-height:1.5}
+.programme-card-tags .programme-country{background:#eaf3fd;color:#145b95}
+.programme-card-tags .programme-level{background:#f1f4f8;color:#445b73}
+.programme-card .programme-card-title{font-size:clamp(19px,2vw,22px);letter-spacing:-.42px;color:#153453;line-height:1.38;margin:11px 0 5px}
+.programme-card p.programme-card-university{color:#13568d;font-weight:850;font-size:15px;margin:3px 0}
+.programme-card p.programme-card-subject{color:#526c86;margin:3px 0;font-size:13px}
+.programme-card-facts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:18px}
+.programme-card-fact{display:flex;flex-direction:column;gap:4px;min-width:0;padding:13px 16px;border-radius:11px;border:1px solid}
+.programme-card-fact .fact-label{text-transform:uppercase;letter-spacing:.8px;font-weight:850;font-size:10px;line-height:1.4}
+.programme-card-fact .fact-value{font-size:15px;line-height:1.35;font-weight:850;overflow-wrap:anywhere}
+.programme-card-fact .fact-help{font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.programme-card .tuition-recorded{background:#fff7e6;border-color:#eed7aa;color:#725015}
+.programme-card .tuition-unconfirmed{background:#f3f6fa;border-color:#e0e7ef;color:#40566d}
+.programme-card .eligibility-listed{background:#eaf7f0;border-color:#cde8d7;color:#215840}
+.programme-card .eligibility-unconfirmed{background:#f3f6fa;border-color:#e0e7ef;color:#40566d}
+.programme-card .eligibility-restricted{background:#fff3e9;border-color:#f1dac7;color:#7b4b25}
+.programme-card-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;
+ padding:13px 24px;background:#fbfdff;border-top:1px solid #eaf0f7}
+.programme-card p.programme-card-caution{margin:0;font-size:11px;max-width:470px;line-height:1.5;color:#667b91}
+.programme-search-page .programme-card .visit{display:inline-flex;align-items:center;justify-content:center;
+ flex:none;align-self:auto;min-height:42px;font-size:13px;padding:11px 16px;white-space:normal;
+ text-align:center;border-radius:9px;background:#1769b1}
+.programme-search-page .programme-card .visit:hover{background:#10518b}
+.programme-search-page .programme-card .visit:focus-visible{outline:3px solid #a4d1f4;outline-offset:3px}
+.programme-search-page .pagination button{border-radius:9px;font-weight:750}
+.programme-search-page .pagination button:not(:disabled):hover{background:#eef5fc}
+.programme-search-page button:focus-visible{outline:3px solid #a9d3f5;outline-offset:2px}
+
+/* Global touches to make other pages feel consistent without changing their functionality. */
+.tile{background:#fff}
+.tile:focus-visible{outline:3px solid #3a8cc7;outline-offset:3px}
+.tile:hover{border-color:#b8d5ed}
+.hero-form button:focus-visible,.detail-button:focus-visible{outline:3px solid #76c0f8;outline-offset:3px}
+.hero-form button{transition:background-color .15s,transform .15s}
+.hero-form button:hover{transform:translateY(-1px)}
+@media(max-width:1100px){
+ .programme-card-facts{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+ .programme-search-page .result-layout{grid-template-columns:255px minmax(0,1fr);gap:18px}
+ .programme-search-page .filterbox{padding:19px}
+ .search-ask-banner{flex-wrap:wrap}
+ .search-ask-link{margin-left:57px}
+}
+@media(max-width:720px){
+ .programme-search-page .result-layout{grid-template-columns:1fr;padding-top:18px}
+ .programme-search-page .filterbox{position:static;max-height:none;overflow:visible}
+ .programme-search-page .result-top{align-items:flex-start}
+ .programme-card-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .search-ask-link{margin-left:auto}
+}
+@media(max-width:580px){
+ .programme-search-page .search-pagehead{padding:26px 0 35px}
+ .programme-search-page .result-top{flex-wrap:wrap}
+ .programme-search-page .sort{width:100%}
+ .programme-card-body{padding:18px}
+ .programme-card-footer{padding:14px 18px;align-items:stretch;flex-direction:column}
+ .programme-card-facts{grid-template-columns:1fr;gap:9px}
+ .programme-search-page .programme-card .visit{width:100%}
+ .search-ask-banner{display:grid;grid-template-columns:auto 1fr;gap:11px}
+ .search-ask-link{grid-column:1/-1;margin:0;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+ .programme-search-page .programme-card,.hero-form button{transition:none;transform:none!important}
+}
+
+/* Highlight the AI assistant as a helpful second route, not an advertisement. */
+.tiles .tile[href="ask-ai.html"]{background:linear-gradient(140deg,#f1f7fe,#fff);border-color:#c6ddf3}
+.tiles .tile[href="ask-ai.html"]>span{background:#dcecfb}
+.tiles .tile[href="ask-ai.html"] b{color:#15588b}
+.tiles .tile[href="ask-ai.html"]:hover{border-color:#92bce0}
