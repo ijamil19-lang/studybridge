@@ -39,3 +39,22 @@
 .ask-disclaimer{margin:18px 0 0}
 @media(max-width:930px){.ask-layout{grid-template-columns:1fr;gap:20px}}
 @media(max-width:530px){.ask-layout{padding-top:20px}.ask-fields{grid-template-columns:1fr;gap:0}.ask-form-panel,.ask-results-panel{padding:20px}.ask-head{padding:30px 0 40px}}
+
+/* Follow-up conversations: kept in current browser tab only */
+.ask-chat{border:1px solid #dce6f1;border-radius:13px;background:#f8fbff;padding:17px;margin:0 0 20px}
+.ask-chat-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.ask-chat-top h3{font-size:16px;margin:0}
+.ask-new-search{border:0;background:transparent;color:#1769b1;font-size:13px;font-weight:750;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.ask-messages{display:grid;gap:11px;margin-bottom:16px;max-height:460px;overflow:auto;overscroll-behavior:contain}
+.ask-message{border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-width:94%}
+.ask-message .ask-message-role{display:block;font-size:11px;font-weight:850;margin:0 0 4px;letter-spacing:.1px}
+.ask-message-user{justify-self:end;background:#e5f1fc;color:#173753}
+.ask-message-assistant{justify-self:start;background:white;border:1px solid #d5e3f1;color:#28445f}
+.ask-followup-form{border-top:1px solid #dfebf4;padding-top:14px}
+.ask-followup-form label{font-size:13px;font-weight:800;display:block;margin-bottom:7px}
+.ask-followup-form textarea{display:block;width:100%;font:inherit;font-size:14px;padding:11px 12px;resize:vertical;min-height:62px;border:1px solid #c6d7e8;border-radius:9px}
+.ask-followup-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.ask-followup-actions span{font-size:12px;line-height:1.4;color:var(--muted)}
+.ask-followup-actions button{background:#1769b1;border:0;border-radius:8px;padding:9px 16px;color:white;font-weight:800;cursor:pointer;white-space:nowrap}
+.ask-followup-actions button:disabled{opacity:.5;cursor:wait}
+@media(max-width:530px){.ask-chat{padding:12px}.ask-followup-actions{align-items:flex-start;flex-direction:column}.ask-followup-actions button{align-self:stretch}.ask-message{max-width:100%}}
