@@ -94,7 +94,9 @@ Deno.serve(async(req:Request)=>{
    if(allowed!==true)return json({error:"Ask AI has reached its usage limit. Please try again later."},429,cors);
    const programmes=await catalogue(base,key,country,degree);
    if(!programmes.length)return json({answer:"No published courses for this country and degree level yet. Please use programme search or try another degree.",matches:[],considered:0},200,cors);
-   const words=tokens([baseQuestion,question,...history.filter(m=>m.role==="user").slice(-2).map(m=>m.content)].join(" "));
+   const rawTopic=[baseQuestion,question,...history.filter(m=>m.role==="user").slice(-2).map(m=>m.content)].join(" ");
+   const expandedTopic=rawTopic.replace(/\bAI\b/gi,"artificial intelligence").replace(/\bIT\b/gi,"information technology").replace(/\bCS\b/gi,"computer science").replace(/\bMBA\b/gi,"business management");
+   const words=tokens(expandedTopic);
    const scored=programmes.map(course=>({course,score:rank(course,words)})).sort((a,b)=>b.score-a.score||a.course.name.localeCompare(b.course.name));
    
    const priorSet=new Set(previousIds);
