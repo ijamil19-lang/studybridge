@@ -212,3 +212,60 @@
 .tiles .tile[href="ask-ai.html"]>span{background:#dcecfb}
 .tiles .tile[href="ask-ai.html"] b{color:#15588b}
 .tiles .tile[href="ask-ai.html"]:hover{border-color:#92bce0}
+
+
+/* Search-indexable destination pages: lightweight HTML, no data API required. */
+.country-pagehead{padding:34px 0 50px;background:linear-gradient(115deg,#0f2c50,#194b79)}
+.country-pagehead .country-eyebrow{margin:20px 0 6px;color:#fcd787;font-size:11px;font-weight:850;letter-spacing:1.4px}
+.country-pagehead h1{letter-spacing:-1px}
+.country-pagehead> .wrap>p:not(.country-eyebrow){max-width:790px;line-height:1.65}
+.country-hero-links{display:flex;align-items:center;flex-wrap:wrap;gap:13px;margin-top:24px}
+.country-hero-btn{display:inline-flex;align-items:center;justify-content:center;background:#ffc24d;color:#173554;
+border-radius:10px;padding:12px 19px;font-weight:850;text-decoration:none;min-height:44px}
+.country-hero-btn:hover{background:#ffdc89;color:#173554}
+.country-hero-secondary{color:#fff;font-weight:800;text-decoration:underline;text-underline-offset:4px}
+.country-hero-secondary:hover{color:#ffdc89}
+.country-content{padding:43px 0 80px}
+.country-content section+section{margin-top:40px}
+.country-content h2{font-size:clamp(22px,2.3vw,29px);letter-spacing:-.5px;margin:0 0 13px}
+.country-content p{line-height:1.7;color:#47617b}
+.country-explainer{max-width:880px}
+.country-results-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.country-results-head h2{margin-bottom:3px}
+.country-results-head p{font-size:13px;color:#71839b;margin:0;max-width:750px}
+.country-results-head>a{font-size:14px;font-weight:800}
+.country-course-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;list-style:none;margin:0;padding:0}
+.country-course{padding:21px;border:1px solid #dce7f2;border-radius:14px;background:#fff;box-shadow:0 3px 14px #19385408}
+.country-course h3{font-size:17px;line-height:1.4;margin:0 0 9px}
+.country-course h3 a{text-decoration:none;color:#144d7d}
+.country-course h3 a:hover{text-decoration:underline}
+.country-course p{font-size:13px;color:#5d7084;margin:6px 0;line-height:1.55}
+.country-course .country-record{color:#426c53;font-weight:650}
+.country-course-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px}
+.country-course-links a{font-size:13px;font-weight:800}
+.country-next{background:#edf5fc;border-radius:17px;padding:25px 28px}
+.country-next>a{display:inline-block;margin-top:8px;font-weight:800}
+.country-other nav{display:flex;gap:9px;flex-wrap:wrap}
+.country-other nav a{border:1px solid #d6e3ef;border-radius:30px;padding:8px 12px;font-size:13px;font-weight:750;text-decoration:none}
+.country-other nav a:hover{background:#edf5fb}
+.destination-intro{max-width:850px;margin:0 0 24px}
+.destination-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.destination-card{min-height:155px;display:flex;flex-direction:column;align-items:flex-start;padding:20px;border:1px solid #d8e5f3;border-radius:13px;
+background:white;text-decoration:none;box-shadow:0 3px 12px #18385408}
+.destination-card:hover{border-color:#97bedf;background:#f8fbff}
+.destination-name{color:#173a5e;font-size:19px;font-weight:850}
+.destination-tag{color:#607890;font-size:13px;margin:3px 0 15px}
+.destination-next{font-size:13px;font-weight:800;margin-top:auto}
+.home-destinations{padding:62px 0;background:#f5f9fd}
+.home-destination-links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.home-destination-links a{display:inline-block;text-decoration:none;border:1px solid #ccddea;background:#fff;color:#205880;
+border-radius:25px;padding:8px 15px;font-size:13px;font-weight:750}
+.home-destination-links a:hover{border-color:#90bbdb;background:#e7f2fb}
+.home-destinations .home-all-destinations{font-size:14px;font-weight:800}
+@media(max-width:820px){.destination-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){
+.country-content{padding-top:28px}.country-course-list{grid-template-columns:1fr}
+.country-hero-btn{width:100%}.country-hero-links{align-items:flex-start;flex-direction:column}
+.destination-grid{grid-template-columns:1fr}
+.country-next{padding:20px}
+}
