@@ -9,7 +9,7 @@ const country=c=>countryNames[c]||c||'Unknown country';
 const cleanURL=value=>{try{const u=new URL(value,location.href);return ['http:','https:'].includes(u.protocol)?u.href:null}catch{return null}};
 const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n};
 async function fetchTable(table,query='select=*&limit=1000',options={}){const response=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{headers:{apikey:SUPABASE_KEY},...options});if(!response.ok)throw new Error(`Database request failed (${response.status})`);return response.json()}
-function addCard(root,{badge,title,lines,link,linkText}){const c=el('article','listing'),main=el('div');if(badge)main.append(el('span','pill',badge));main.append(el('h3','',title||'Untitled listing'));for(const line of lines){if(line)main.append(el('p','',line))}c.append(main);const url=cleanURL(link);if(url){const a=el('a','visit',linkText||'Official website ↗');a.href=url;if(new URL(url).origin!==location.origin){a.target='_blank';a.rel='noopener noreferrer'}c.append(a)}root.append(c)}
+function addCard(root,{badge,title,lines,link,linkText}){const c=el('article','listing'),main=el('div');if(badge)main.append(el('span','pill',badge));main.append(el('h3','',title||'Untitled listing'));for(const line of lines){if(!line)continue;if(typeof line==='string'){main.append(el('p','',line));continue}if(line.text)main.append(el('p',line.className||'',line.text))}c.append(main);const url=cleanURL(link);if(url){const a=el('a','visit',linkText||'Official website ↗');a.href=url;if(new URL(url).origin!==location.origin){a.target='_blank';a.rel='noopener noreferrer'}c.append(a)}root.append(c)}
 let rows=[],page=1;const perPage=12;let render=()=>{};
 function paginate(filtered,draw){const root=$('results');root.replaceChildren();$('status').textContent=`${filtered.length} ${filtered.length===1?'result':'results'} found`;if(!filtered.length){root.append(el('div','empty','No matching listings found. Try different filters.'));$('pagination').replaceChildren();return}const pages=Math.ceil(filtered.length/perPage);page=Math.min(page,pages);filtered.slice((page-1)*perPage,page*perPage).forEach(draw);const p=$('pagination');p.replaceChildren();if(pages<2)return;const prev=el('button','','← Previous'),next=el('button','','Next →');prev.disabled=page===1;next.disabled=page===pages;prev.onclick=()=>{page--;render();window.scrollTo({top:220,behavior:'smooth'})};next.onclick=()=>{page++;render();window.scrollTo({top:220,behavior:'smooth'})};p.append(prev,el('span','',`Page ${page} of ${pages}`),next)}
 function debounce(fn){let timer;return()=>{clearTimeout(timer);timer=setTimeout(()=>{page=1;fn()},220)}}
@@ -48,15 +48,19 @@ function internationalEligibility(value){
  };
 }
 function courseDetails(r){
- const info=[r.universities?.name,r.subject||r.field];
+ const info=[
+  {text:r.universities?.name||'University not recorded',className:'course-university'},
+  {text:r.subject||r.field||'Subject not recorded',className:'course-subject'}
+ ];
  const fee=Number(r.tuition_fee);
  if(r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0){
   const currency=String(r.tuition_currency||'').trim();
-  info.push('Listed tuition: '+(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' (confirm applicant fee category)');
+  info.push({text:'Listed tuition: '+(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' (confirm applicant fee category)',className:'course-tuition course-tuition-known'});
  }else{
-  info.push('Tuition fees: check official university website');
+  info.push({text:'Tuition fees: not yet confirmed — check official university website',className:'course-tuition course-tuition-unknown'});
  }
- info.push(internationalEligibility(r.international_students).listText);
+ const eligibility=internationalEligibility(r.international_students);
+ info.push({text:eligibility.listText,className:'course-international course-international-'+eligibility.kind});
  return info;
 }
 function setupSearch(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value,d=$('degree').value,s=$('subject').value,international=$('international').value;const filtered=rows.filter(r=>{const u=r.universities||{};if(ct!=='all'&&u.country_code!==ct)return false;if(d!=='all'&&r.degree_level!==d)return false;if(international==='listed'&&r.international_students!==true)return false;if(international==='restricted'&&r.international_students!==false)return false;if(international==='unconfirmed'&&r.international_students!=null)return false;const words=[r.name,r.subject,r.field,u.name].filter(Boolean).join(' ').toLowerCase();if(!words.includes(q))return false;if(s==='all')return true;const relevant=[r.name,r.subject,r.field].filter(Boolean).join(' ').toLowerCase();const match=k=>new RegExp('(^|[^a-z])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)','i').test(relevant);const keywords=subjectGroups[s]||[];return s==='other'?!Object.values(subjectGroups).flat().some(match):keywords.some(match)});if($('sort').value==='university')filtered.sort((a,b)=>(a.universities?.name||'').localeCompare(b.universities?.name||''));paginate(filtered,r=>addCard($('results'),{badge:`${country(r.universities?.country_code)} · ${r.degree_level||'Programme'}`,title:r.name,lines:courseDetails(r),link:'programme.html?id='+encodeURIComponent(r.id),linkText:'View programme details →'}))};bindInputs(['q','country','degree','subject','international','sort']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';$('degree').value='all';$('subject').value='all';$('international').value='all';page=1;render()};fetchAllProgrammes().then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load programmes. Check database permissions and try refreshing.'))})}
