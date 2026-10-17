@@ -106,7 +106,7 @@
       });
       const data=await response.json().catch(()=>({error:"The AI service did not return a valid response."}));
       if(!response.ok)throw new Error(data.error||"Ask AI is temporarily unavailable.");
-      if(!followup){original={...initialPayload(),base_question:payload.question};clearConversation(false);original={...initialPayload(),base_question:payload.question};}
+      if(!followup){clearConversation(false);original={...payload,base_question:payload.question};}
       const reply=data.answer||"Please review these courses and check official entry criteria.";
       chat.hidden=false;
       addMessage("user",payload.question);
