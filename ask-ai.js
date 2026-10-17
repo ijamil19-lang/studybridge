@@ -32,7 +32,7 @@
   };
   function addMessage(role,text){
     const bubble=node("div","ask-message ask-message-"+role);
-    bubble.append(node("span","ask-message-role",role==="user"?"You":"StudyBridge AI"));
+    bubble.append(node("span","ask-message-role",role==="user"?"You":"UniRouteFinder AI"));
     bubble.append(node("span","",text));
     messages.append(bubble);
     messages.scrollTop=messages.scrollHeight;
@@ -69,7 +69,7 @@
       if(programme.reason)card.append(node("p","ask-reason",programme.reason));
       const actions=node("div","ask-actions");
       if(Number.isSafeInteger(Number(programme.id))&&Number(programme.id)>0){
-        const detail=node("a","ask-detail","View StudyBridge details →");
+        const detail=node("a","ask-detail","View UniRouteFinder details →");
         detail.href="programme.html?id="+encodeURIComponent(programme.id);
         actions.append(detail);
       }
