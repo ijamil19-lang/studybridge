@@ -139,7 +139,7 @@
     event.preventDefault();
     if(!original||working||!followForm.reportValidity())return;
     const question=followInput.value.trim();
-    if(question.length<5){showStatus("Please add a little more detail.",true);return;}
+    if(question.length<8){showStatus("Please add a little more detail.",true);return;}
     const payload={
       ...original,question,
       base_question:original.base_question,
