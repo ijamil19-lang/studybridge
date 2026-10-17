@@ -63,7 +63,84 @@ function courseDetails(r){
  info.push({text:eligibility.listText,className:'course-international course-international-'+eligibility.kind});
  return info;
 }
-function setupSearch(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value,d=$('degree').value,s=$('subject').value,international=$('international').value;const filtered=rows.filter(r=>{const u=r.universities||{};if(ct!=='all'&&u.country_code!==ct)return false;if(d!=='all'&&r.degree_level!==d)return false;if(international==='listed'&&r.international_students!==true)return false;if(international==='restricted'&&r.international_students!==false)return false;if(international==='unconfirmed'&&r.international_students!=null)return false;const words=[r.name,r.subject,r.field,u.name].filter(Boolean).join(' ').toLowerCase();if(!words.includes(q))return false;if(s==='all')return true;const relevant=[r.name,r.subject,r.field].filter(Boolean).join(' ').toLowerCase();const match=k=>new RegExp('(^|[^a-z])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)','i').test(relevant);const keywords=subjectGroups[s]||[];return s==='other'?!Object.values(subjectGroups).flat().some(match):keywords.some(match)});if($('sort').value==='university')filtered.sort((a,b)=>(a.universities?.name||'').localeCompare(b.universities?.name||''));paginate(filtered,r=>addCard($('results'),{badge:`${country(r.universities?.country_code)} · ${r.degree_level||'Programme'}`,title:r.name,lines:courseDetails(r),link:'programme.html?id='+encodeURIComponent(r.id),linkText:'View programme details →'}))};bindInputs(['q','country','degree','subject','international','sort']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';$('degree').value='all';$('subject').value='all';$('international').value='all';page=1;render()};fetchAllProgrammes().then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load programmes. Check database permissions and try refreshing.'))})}
+
+/* Programme cards are intentionally distinct from generic university/opportunity cards. */
+function addProgrammeCard(root,r){
+ const card=el('article','listing programme-card');
+ const body=el('div','programme-card-body');
+ const tags=el('div','programme-card-tags');
+ tags.append(el('span','pill programme-country',country(r.universities?.country_code)));
+ tags.append(el('span','pill programme-level',r.degree_level||'Programme'));
+ body.append(tags);
+ body.append(el('h3','programme-card-title',r.name||'Untitled programme'));
+ body.append(el('p','programme-card-university',r.universities?.name||'University not recorded'));
+ const subject=r.subject||r.field;
+ if(subject)body.append(el('p','programme-card-subject',subject));
+ const facts=el('div','programme-card-facts');
+ const tuition=el('div','programme-card-fact tuition-fact');
+ const fee=Number(r.tuition_fee);
+ const recorded=r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0;
+ tuition.classList.add(recorded?'tuition-recorded':'tuition-unconfirmed');
+ tuition.append(el('span','fact-label','Tuition fee'));
+ if(recorded){
+  const currency=String(r.tuition_currency||'').trim();
+  tuition.append(el('strong','fact-value',(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})));
+  tuition.append(el('span','fact-help','Listed amount · confirm fee category and year'));
+ }else{
+  tuition.append(el('strong','fact-value','Not yet confirmed'));
+  tuition.append(el('span','fact-help','Check the official university website'));
+ }
+ const eligibility=internationalEligibility(r.international_students);
+ const intl=el('div','programme-card-fact eligibility-fact');
+ intl.classList.add('eligibility-'+eligibility.kind);
+ intl.append(el('span','fact-label','International applicants'));
+ const status=eligibility.kind==='listed'?'Listed as accepting applications':
+  eligibility.kind==='restricted'?'Restrictions recorded':'Status not yet confirmed';
+ intl.append(el('strong','fact-value',status));
+ intl.append(el('span','fact-help',eligibility.kind==='listed'?'Individual eligibility must be checked':
+  eligibility.kind==='restricted'?'Check for exceptions with the university':'Confirm your nationality and course requirements'));
+ facts.append(tuition,intl);
+ body.append(facts);
+ card.append(body);
+ const footer=el('div','programme-card-footer');
+ footer.append(el('p','programme-card-caution','Always confirm fees, entry requirements and deadlines with the university.'));
+ const a=el('a','visit','View programme details →');
+ a.href='programme.html?id='+encodeURIComponent(r.id);
+ footer.append(a);card.append(footer);root.append(card);
+}
+function renderProgrammeFilterChips(){
+ const wrap=$('active-filters');
+ if(!wrap)return;
+ wrap.replaceChildren();
+ const chosen=[
+  {id:'q',name:'Keyword'},
+  {id:'country',name:'Country'},
+  {id:'degree',name:'Degree'},
+  {id:'subject',name:'Subject'},
+  {id:'international',name:'International'}
+ ].filter(x=>x.id==='q'?$('q').value.trim():$(x.id).value!=='all');
+ wrap.hidden=chosen.length===0;
+ if(!chosen.length)return;
+ wrap.append(el('span','filter-chip-caption','Active filters:'));
+ for(const item of chosen){
+  const input=$(item.id);
+  const value=item.id==='q'?input.value.trim():input.selectedOptions?.[0]?.textContent||input.value;
+  const btn=el('button','filter-chip',item.name+': '+value+' ×');
+  btn.type='button';
+  btn.setAttribute('aria-label','Remove '+item.name+' filter');
+  btn.onclick=()=>{
+   input.value=item.id==='q'?'':'all';
+   page=1;render();
+  };
+  wrap.append(btn);
+ }
+ const clear=el('button','filter-chip-clear','Clear all');
+ clear.type='button';
+ clear.onclick=()=>{$('reset').click()};
+ wrap.append(clear);
+}
+
+function setupSearch(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value,d=$('degree').value,s=$('subject').value,international=$('international').value;const filtered=rows.filter(r=>{const u=r.universities||{};if(ct!=='all'&&u.country_code!==ct)return false;if(d!=='all'&&r.degree_level!==d)return false;if(international==='listed'&&r.international_students!==true)return false;if(international==='restricted'&&r.international_students!==false)return false;if(international==='unconfirmed'&&r.international_students!=null)return false;const words=[r.name,r.subject,r.field,u.name].filter(Boolean).join(' ').toLowerCase();if(!words.includes(q))return false;if(s==='all')return true;const relevant=[r.name,r.subject,r.field].filter(Boolean).join(' ').toLowerCase();const match=k=>new RegExp('(^|[^a-z])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)','i').test(relevant);const keywords=subjectGroups[s]||[];return s==='other'?!Object.values(subjectGroups).flat().some(match):keywords.some(match)});if($('sort').value==='university')filtered.sort((a,b)=>(a.universities?.name||'').localeCompare(b.universities?.name||''));renderProgrammeFilterChips();paginate(filtered,r=>addProgrammeCard($('results'),r))};bindInputs(['q','country','degree','subject','international','sort']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';$('degree').value='all';$('subject').value='all';$('international').value='all';page=1;render()};fetchAllProgrammes().then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load programmes. Check database permissions and try refreshing.'))})}
 function setupUniversities(){readParams();render=()=>{const q=$('q').value.trim().toLowerCase(),ct=$('country').value;const filtered=rows.filter(r=>(ct==='all'||r.country_code===ct)&&[r.name,r.city,country(r.country_code)].join(' ').toLowerCase().includes(q));paginate(filtered,r=>addCard($('results'),{badge:country(r.country_code),title:r.name,lines:[r.city,r.description?.slice(0,190)],link:r.website_url||r.admissions_url}))};bindInputs(['q','country']);$('reset').onclick=()=>{$('q').value='';$('country').value='all';page=1;render()};fetchTable('universities','select=*&order=name.asc&limit=1000').then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load universities. Check database permissions and try refreshing.'))})}
 const config={scholarships:{name:'Scholarships',table:'scholarships',title:['name','title','scholarship_name'],badge:['type','funding_type','degree_level'],details:[['provider','organization','university_name'],['deadline','application_deadline','closing_date'],['description','eligibility']],links:['scholarship_url','official_url','website_url','application_url','url']},admissions:{name:'Admissions & deadlines',table:'admissions',title:['programme_name','name','title','intake'],badge:['intake','academic_year','status'],details:[['university_name','university','institution'],['application_deadline','deadline','closing_date'],['degree_level','requirements','description']],links:['admissions_url','application_url','official_url','source_url','url']},phd:{name:'PhD research positions',table:'phd_positions',title:['title','position_title','name','research_area'],badge:['research_area','field','status'],details:[['university_name','university','department'],['deadline','application_deadline','closing_date'],['description','funding']],links:['position_url','application_url','official_url','source_url','url']}};
 function setupOpportunities(){const kind=new URLSearchParams(location.search).get('type');const c=config[kind]||config.scholarships;$('heading').textContent=c.name;$('subheading').textContent=c.name;document.title=`${c.name} | StudyBridge`;render=()=>{const q=$('q').value.trim().toLowerCase();const filtered=rows.filter(r=>Object.values(r).filter(v=>typeof v==='string'||typeof v==='number').join(' ').toLowerCase().includes(q));paginate(filtered,r=>addCard($('results'),{badge:text(r,c.badge)||c.name,title:text(r,c.title)||'Opportunity',lines:c.details.map(keys=>text(r,keys)).filter(Boolean).map(v=>v.slice(0,190)),link:text(r,c.links)}))};bindInputs(['q']);$('reset').onclick=()=>{$('q').value='';page=1;render()};fetchTable(c.table).then(data=>{rows=data;render()}).catch(e=>{$('status').textContent=e.message;$('results').append(el('div','empty','Unable to load these listings. They may not be publicly accessible yet.'))})}
