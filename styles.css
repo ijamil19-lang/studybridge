@@ -206,3 +206,9 @@
 @media(prefers-reduced-motion:reduce){
  .programme-search-page .programme-card,.hero-form button{transition:none;transform:none!important}
 }
+
+/* Highlight the AI assistant as a helpful second route, not an advertisement. */
+.tiles .tile[href="ask-ai.html"]{background:linear-gradient(140deg,#f1f7fe,#fff);border-color:#c6ddf3}
+.tiles .tile[href="ask-ai.html"]>span{background:#dcecfb}
+.tiles .tile[href="ask-ai.html"] b{color:#15588b}
+.tiles .tile[href="ask-ai.html"]:hover{border-color:#92bce0}
