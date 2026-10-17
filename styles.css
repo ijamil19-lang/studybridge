@@ -74,7 +74,7 @@
 .listing p.course-international-restricted{color:#87501e;background:#fff2e8}
 
 
-/* StudyBridge visual refresh — programme discovery (October 2026) */
+/* UniRouteFinder visual refresh — programme discovery (October 2026) */
 .programme-search-page{background:#f6f9fd}
 .programme-search-page .search-pagehead{
  background:radial-gradient(circle at 85% 15%,rgba(70,151,216,.19),transparent 42%),linear-gradient(112deg,#10345d,#173b66 67%,#1a4675);
@@ -268,4 +268,11 @@ border-radius:25px;padding:8px 15px;font-size:13px;font-weight:750}
 .country-hero-btn{width:100%}.country-hero-links{align-items:flex-start;flex-direction:column}
 .destination-grid{grid-template-columns:1fr}
 .country-next{padding:20px}
+}
+
+/* UniRouteFinder: ensure the longer brand remains legible on small screens. */
+@media (max-width:620px){
+ .nav .logo{font-size:19px;letter-spacing:-.5px}
+ .nav .logo-mark{width:34px;height:34px;margin-right:7px;font-size:20px;flex-shrink:0}
+ .nav{gap:8px}
 }
