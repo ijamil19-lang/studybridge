@@ -18,7 +18,7 @@ Identify countries and universities where UniRouteFinder is currently missing de
 | United States (US) | 2 | 12 | 12 | 0 | 0 | 0 | 0 | 2 |
 | United Kingdom (GB) | 14 | 190 | 82 | 68 | 17 | 0 | 104 | 0 |
 | Sweden (SE) | 40 | 780 | 138 | 505 | 94 | 0 | 0 | 0 |
-| **Total** | **155** | **1,178** | **387** | **632** | **119** | **26** | **165** | **96** |
+| **Total** | **155** | **1,178** | **359** | **632** | **119** | **26** | **165** | **96** |
 
 Degree columns intentionally omit Foundation, Certificate and Other, so their sum differs from all active programmes. These are database counts, not official national totals. Additional `status=active` records can still have outdated or closed admissions, incomplete descriptions, or unconfirmed international applicant rules.
 
