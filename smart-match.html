@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Match – Find Study Abroad Courses | UniRouteFinder</title>
+<meta name="description" content="Discover possible study abroad programmes based on your qualifications, subject and tuition budget. Check verified university requirements before applying.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.match-wrap{max-width:1080px;margin:40px auto;padding:0 20px}.match-head{margin-bottom:25px}.match-head h1{font-size:clamp(2rem,4vw,3rem)}.match-layout{display:grid;grid-template-columns:minmax(270px,330px) 1fr;gap:26px;align-items:start}.match-panel,.match-result{background:#fff;border:1px solid #dfe7f0;border-radius:16px;padding:24px;box-shadow:0 5px 24px #152a4510}.match-panel{display:grid;gap:12px}.match-panel label{font-size:14px;font-weight:700;display:grid;gap:6px}.match-panel input,.match-panel select{width:100%;padding:12px;border:1px solid #bacadd;border-radius:9px;background:#fff;color:#14273b;font-size:15px}.match-panel button{background:#1159c2;color:white;border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}.match-results{display:grid;gap:14px}.match-result h3{margin:8px 0;font-size:20px}.match-result p{margin:7px 0;color:#314459}.match-result a{color:#1159c2;font-weight:700}.match-pill{display:inline-block;background:#e8f1fe;color:#164d94;padding:6px 10px;border-radius:99px;font-size:12px;font-weight:700}.match-warning{background:#fff7e8;border:1px solid #f3d9a4;border-radius:10px;padding:12px;color:#6e4b11}.match-note{color:#57667a;font-size:14px}.match-status{font-weight:700}.match-result a:focus-visible,.match-panel button:focus-visible{outline:3px solid #efab24;outline-offset:2px}@media(max-width:760px){.match-layout{grid-template-columns:1fr}}
+</style></head><body>
+<header class="top"><div class="wrap nav"><a class="logo" href="index.html"><span class="logo-mark">🎓</span>Uni<span>RouteFinder</span></a><nav><a href="search.html">Programmes</a><a href="universities.html">Universities</a><a href="smart-match.html" aria-current="page">Smart Match</a></nav></div></header>
+<main class="match-wrap"><div class="match-head"><span class="eyebrow dark">PERSONALISED COURSE DISCOVERY</span><h1>Find your possible university matches</h1><p>Compare subjects against the live university database. Matching a subject is <strong>not</strong> proof of eligibility, an affordable international fee or an open intake.</p></div>
+<div class="match-layout"><form id="match-form" class="match-panel"><h2>Your study profile</h2>
+<label>Country of education<select id="match-country"><option>Pakistan</option><option>India</option><option>Bangladesh</option><option>Nigeria</option><option>Other</option></select></label>
+<label>Qualification<select id="match-qualification"><option>FSc / Higher Secondary</option><option>A Levels</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Other qualification</option></select></label>
+<label>Degree<select id="match-degree"><option>Bachelor</option><option>Master</option><option>PhD</option></select></label>
+<label>Subject<select id="match-subject"><option>Computer Science</option><option>Engineering</option><option>Business</option><option>Medicine</option><option>Psychology</option><option>Data Science</option></select></label>
+<label>Maximum annual tuition (£)<input id="match-budget" type="number" min="0" max="1000000" value="10000" required></label>
+<button type="submit">Find possible matches →</button>
+<p class="match-note">We do not store your profile. Other currencies and unverified fees are not assumed to be within your budget.</p></form>
+<section aria-live="polite"><div id="match-status" class="match-status">Searching available programmes…</div><div id="match-results" class="match-results"></div></section></div>
+</main><footer><div class="wrap footnote">© 2026 UniRouteFinder · Suggestions are informational. Always verify qualifications, international tuition and admissions with the official university.</div></footer>
+<script src="smart-match.js" defer></script></body></html>
