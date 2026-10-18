@@ -4,8 +4,34 @@ const SUPABASE_KEY='sb_publishable_-fa_jUcsGTzjUFatez1adg_aN9rip7c';
 const $=id=>document.getElementById(id);
 function elem(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=String(text);return n;}
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:null}catch{return null;}}
-function feeInfo(r){if(r.fee_status==='within_budget_verified')return 'Annual international tuition: verified within your GBP budget.';if(r.fee_status==='above_budget_verified')return 'Annual international tuition: above your budget.';if(r.tuition_fee!==null&&r.tuition_fee!==undefined)return 'Listed fee: '+Number(r.tuition_fee).toLocaleString('en-GB')+' '+(r.tuition_currency||'')+' — international annual fee/budget comparison NOT verified.';return 'International tuition: not confirmed.';}
-function draw(r,root){const card=elem('article','match-result');card.append(elem('span','match-pill','Possible subject match · '+(r.destination||'Country unconfirmed')));card.append(elem('h3','',r.programme_name||'Programme'));card.append(elem('p','',r.university_name||'University'));card.append(elem('p','',feeInfo(r)));const detail=elem('p','match-warning',r.qualification_status==='verified_eligible'?'Qualification accepted according to a recorded official source; additional requirements may apply.':r.qualification_status==='conditional'?'Qualification may be accepted under specific conditions; check the source.':'Your qualification eligibility: not verified for this programme.');card.append(detail);if(r.match_explanation&&r.qualification_status==='conditional')card.append(elem('p','match-note',r.match_explanation));card.append(elem('p','match-note','International applicants: '+(r.international_students===true?'General pathway recorded; check your individual eligibility.':'Not confirmed for this programme.')+' No guaranteed admission or confirmed open intake.'));const url=safeUrl(r.programme_url);if(url){const a=elem('a','','Check official programme information ↗');a.href=url;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}else card.append(elem('p','match-note','Individual programme link not yet verified.'));root.append(card);}
+const countryLabels={SE:'Sweden',GB:'United Kingdom',UK:'United Kingdom',US:'United States',ES:'Spain',IT:'Italy',RO:'Romania',FI:'Finland',HU:'Hungary',LT:'Lithuania',CA:'Canada',DE:'Germany',FR:'France',PL:'Poland',NL:'Netherlands'};
+function destinationName(code){return countryLabels[code]||code||'Destination not confirmed';}
+function feeInfo(r){
+ if(r.fee_status==='within_budget_verified')return 'Budget check: verified annual international tuition is within your budget.';
+ if(r.fee_status==='above_budget_verified')return 'Budget check: verified annual international tuition exceeds your budget.';
+ if(r.tuition_fee!=null)return 'Listed tuition: '+Number(r.tuition_fee).toLocaleString('en-GB')+' '+(r.tuition_currency||'')+' · Annual international fee and GBP affordability not yet verified.';
+ return 'Budget check: tuition unknown — affordability cannot be confirmed.';
+}
+function draw(r,root){
+ const card=elem('article','match-result');
+ card.append(elem('span','match-pill','Subject match · '+destinationName(r.destination)));
+ card.append(elem('h3','',r.programme_name||'Programme'));
+ card.append(elem('p','',r.university_name||'University'));
+ card.append(elem('p','',feeInfo(r)));
+ const label=r.qualification_status==='verified_eligible'?'Qualification evidence recorded — check additional programme requirements.':r.qualification_status==='conditional'?'General entry pathway may apply; programme eligibility is not verified.':'Your qualification eligibility has not been verified.';
+ card.append(elem('p','match-warning',label));
+ if(r.qualification_status==='conditional'&&r.match_explanation){
+  const explanation=String(r.match_explanation),match=explanation.match(/https:\/\/[^\s]+/);
+  const guidance=match?explanation.slice(0,match.index).replace(/Official admissions guidance:\s*$/,'').trim():explanation;
+  card.append(elem('p','match-note',guidance.length>260?guidance.slice(0,257)+'…':guidance));
+  if(match){const link=safeUrl(match[0]);if(link){const anchor=elem('a','','Official entry requirements ↗');anchor.href=link;anchor.target='_blank';anchor.rel='noopener noreferrer';card.append(anchor);}}
+ }
+ card.append(elem('p','match-note','International pathway: '+(r.international_students===true?'generally recorded':'not confirmed')+'. Admission dates and individual eligibility must be verified.'));
+ const url=safeUrl(r.programme_url);
+ if(url){const a=elem('a','','View university programme ↗');a.href=url;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}
+ else card.append(elem('p','match-note','Official programme link not yet verified.'));
+ root.append(card);
+}
 
 const qualificationOptions={
  Pakistan:['FSc / Higher Secondary','FA / Higher Secondary','ICS / Higher Secondary','A Levels','International Baccalaureate','Matric / SSC'],
