@@ -52,11 +52,12 @@ const qualificationOptions={
 const commonQualifications=['National secondary school qualification','A Levels','International Baccalaureate','Bachelor’s Degree','Master’s Degree'];
 function refreshQualifications(){
  const list=$('match-qualification'),current=list.value;
- const values=[...new Set([...(qualificationOptions[$('match-country').value]||[]),...commonQualifications])];
+ const all=$('match-country').value==='All countries';
+ const values=[...new Set([...(all?['Any qualification / Not specified']:qualificationOptions[$('match-country').value]||[]),...commonQualifications])];
  list.replaceChildren();
  for(const value of values){const option=elem('option','',value);option.value=value;list.append(option);}
  const other=elem('option','','Other — enter manually');other.value='__other__';list.append(other);
- list.value=values.includes(current)?current:values[0];
+ list.value=all?'Any qualification / Not specified':values.includes(current)?current:values[0];
  syncCustomQualification();
 }
 function syncCustomQualification(){const custom=$('match-qualification').value==='__other__';$('match-custom-label').hidden=!custom;$('match-custom').required=custom;}
