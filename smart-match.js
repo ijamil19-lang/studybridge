@@ -9,6 +9,7 @@ function destinationName(code){return countryLabels[code]||code||'Destination no
 function feeInfo(r){
  if(r.fee_status==='within_budget_verified')return 'Budget check: verified annual international tuition is within your budget.';
  if(r.fee_status==='above_budget_verified')return 'Budget check: verified annual international tuition exceeds your budget.';
+ if(r.fee_status==='fee_verified_conversion_needed')return 'Verified annual international tuition: '+Number(r.tuition_fee).toLocaleString('en-GB')+' '+(r.tuition_currency||'')+' · GBP budget comparison not yet available.';
  if(r.tuition_fee!=null)return 'Listed tuition: '+Number(r.tuition_fee).toLocaleString('en-GB')+' '+(r.tuition_currency||'')+' · Annual international fee and GBP affordability not yet verified.';
  return 'Budget check: tuition unknown — affordability cannot be confirmed.';
 }
