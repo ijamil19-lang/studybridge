@@ -19,7 +19,7 @@ function readParams(){const p=new URLSearchParams(location.search);for(const id 
 async function fetchAllProgrammes(){
  const size=500,all=[];
  for(let offset=0;offset<50000;offset+=size){
-  const query='select=id,name,degree_level,subject,field,programme_url,tuition_fee,tuition_currency,international_students,universities(name,country_code)&status=eq.active&order=name.asc,id.asc&limit='+size+'&offset='+offset;
+  const query='select=id,name,degree_level,subject,field,programme_url,tuition_fee,tuition_currency,international_students,smart_match_evidence(fee_category,tuition_period,fee_verified_at,fee_source_url,fee_academic_year),universities(name,country_code,website_url)&status=eq.active&order=name.asc,id.asc&limit='+size+'&offset='+offset;
   const batch=await fetchTable('programmes',query);
   if(!Array.isArray(batch))throw new Error('Unexpected programmes response');
   all.push(...batch);
@@ -47,17 +47,46 @@ function internationalEligibility(value){
   explanation:'There is not enough confirmed information to state whether this programme accepts international applications. Ask the university about your nationality, entry qualifications and visa requirements.'
  };
 }
+function feeVerification(r){
+ const evidence=Array.isArray(r.smart_match_evidence)?r.smart_match_evidence[0]:r.smart_match_evidence;
+ const fee=Number(r.tuition_fee);
+ if(r.tuition_fee===null||r.tuition_fee===undefined||!Number.isFinite(fee)||fee<=0){
+  return {status:'unavailable',label:'Fee information unavailable',note:'No tuition amount is recorded. Check the official university website.'};
+ }
+ const source=cleanURL(evidence?.fee_source_url);
+ const universitySite=cleanURL(r.universities?.website_url);
+ let officialDomainMatch=false;
+ try{
+  const sourceHost=new URL(source).hostname.toLowerCase();
+  const universityHost=new URL(universitySite).hostname.toLowerCase();
+  officialDomainMatch=sourceHost===universityHost||sourceHost.endsWith('.'+universityHost);
+ }catch{}
+ const checked=evidence?.fee_verified_at?new Date(evidence.fee_verified_at):null;
+ const ageDays=checked&&!Number.isNaN(checked.getTime())?(Date.now()-checked.getTime())/86400000:Infinity;
+ const complete=Boolean(evidence?.fee_academic_year)&&
+  ['international','domestic','all'].includes(evidence?.fee_category)&&
+  ['annual','semester','total'].includes(evidence?.tuition_period);
+ if(source&&officialDomainMatch&&complete&&ageDays>=-1&&ageDays<=180){
+  return {status:'verified',label:'Verified from official university source',
+   note:'Checked '+checked.toLocaleDateString('en-GB')+' · '+evidence.fee_category+' fee · '+evidence.tuition_period+' · '+evidence.fee_academic_year,
+   source};
+ }
+ return {status:'unverified',label:'Unverified research listing',
+  note:'This amount has not met all official-source verification checks. Confirm the fee, applicant category and academic year directly with the university.',
+  source:source||null};
+}
 function courseDetails(r){
  const info=[
   {text:r.universities?.name||'University not recorded',className:'course-university'},
   {text:r.subject||r.field||'Subject not recorded',className:'course-subject'}
  ];
  const fee=Number(r.tuition_fee);
- if(r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0){
+ const verification=feeVerification(r);
+ if(verification.status!=='unavailable'){
   const currency=String(r.tuition_currency||'').trim();
-  info.push({text:'UNVERIFIED FEE LISTING: '+(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' — not confirmed by the university; check the official fee for your applicant category and academic year.',className:'course-tuition course-tuition-unknown'});
+  info.push({text:(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' · '+verification.label+'. '+verification.note,className:'course-tuition course-tuition-'+verification.status});
  }else{
-  info.push({text:'Tuition fees: not yet confirmed — check official university website',className:'course-tuition course-tuition-unknown'});
+  info.push({text:verification.label+'. '+verification.note,className:'course-tuition course-tuition-unknown'});
  }
  const eligibility=internationalEligibility(r.international_students);
  info.push({text:eligibility.listText,className:'course-international course-international-'+eligibility.kind});
@@ -82,13 +111,21 @@ function addProgrammeCard(root,r){
  const recorded=r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0;
  tuition.classList.add(recorded?'tuition-recorded':'tuition-unconfirmed');
  tuition.append(el('span','fact-label','Tuition fee · verification status'));
+ const verification=feeVerification(r);
  if(recorded){
   const currency=String(r.tuition_currency||'').trim();
   tuition.append(el('strong','fact-value',(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})));
-  tuition.append(el('span','fact-help','UNVERIFIED — research listing only. This amount has not been confirmed by the university. Check the official fee for your applicant category and academic year before making decisions.'));
+  tuition.append(el('span','fee-status-badge fee-status-'+verification.status,verification.label));
+  tuition.append(el('span','fact-help',verification.note));
+  if(verification.source){
+   const sourceLink=el('a','fee-source-link','View fee source ↗');
+   sourceLink.href=verification.source;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';
+   tuition.append(sourceLink);
+  }
  }else{
   tuition.append(el('strong','fact-value','Not yet confirmed'));
-  tuition.append(el('span','fact-help','No verified amount available. Check the official university website.'));
+  tuition.append(el('span','fee-status-badge fee-status-unavailable','Fee information unavailable'));
+  tuition.append(el('span','fact-help','No amount is recorded. Check the official university website.'));
  }
  const eligibility=internationalEligibility(r.international_students);
  const intl=el('div','programme-card-fact eligibility-fact');
@@ -278,7 +315,7 @@ async function setupProgrammeDetail(){
   return;
  }
  try{
-  const query='select=id,name,degree_level,subject,field,description,duration,study_mode,language,tuition_fee,tuition_currency,international_students,programme_url,application_url,last_verified,universities(name,city,country_code,website_url,admissions_url)&status=eq.active&id=eq.'+encodeURIComponent(id)+'&limit=1';
+  const query='select=id,name,degree_level,subject,field,description,duration,study_mode,language,tuition_fee,tuition_currency,international_students,programme_url,application_url,last_verified,smart_match_evidence(fee_category,tuition_period,fee_verified_at,fee_source_url,fee_academic_year),universities(name,city,country_code,website_url,admissions_url)&status=eq.active&id=eq.'+encodeURIComponent(id)+'&limit=1';
   // Avoid leaving course pages in a loading state if the data service stalls.
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),15000);
@@ -322,10 +359,18 @@ async function setupProgrammeDetail(){
   detailFact(facts,'Study mode',formatProgrammeText(r.study_mode,'Check official university website'));
   detailFact(facts,'Teaching language',r.language||'Check official university website');
   const fee=Number(r.tuition_fee);
+  const verification=feeVerification(r);
   const feeValue=r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0
-   ?'UNVERIFIED RESEARCH LISTING: '+(String(r.tuition_currency||'').trim()+' '+fee.toLocaleString('en-GB',{maximumFractionDigits:2})).trim()+'. Not confirmed by the university; check the official fee for your applicant category and academic year.'
-   :'NOT CONFIRMED: No verified tuition fee is available. Check the official university website.';
+   ?(String(r.tuition_currency||'').trim()+' '+fee.toLocaleString('en-GB',{maximumFractionDigits:2})).trim()
+   :'No amount recorded';
   detailFact(facts,'Tuition fees',feeValue);
+  detailFact(facts,'Fee verification status',verification.label+'. '+verification.note);
+  if(verification.source){
+   const sourceRow=el('div','programme-fee-source-row');
+   const sourceLink=el('a','fee-source-link','View fee source on university website ↗');
+   sourceLink.href=verification.source;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';
+   sourceRow.append(sourceLink);facts.append(sourceRow);
+  }
   const eligibility=internationalEligibility(r.international_students);
   const eligibilityLabel=$('programme-international-status');
   eligibilityLabel.textContent=eligibility.label;
