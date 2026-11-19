@@ -466,3 +466,5 @@ button:focus-visible,a:focus-visible{outline:3px solid #e9bd65;outline-offset:3p
 .admission-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 .admission-help-tile{border-color:#e5d4ad;background:#fffdf8}
 @media(max-width:650px){.admission-form{padding:19px}.admission-grid,.admission-country-grid{grid-template-columns:1fr}.admission-page{padding-top:28px}}
+
+.admission-form-status.pending{display:block;background:#fff7e5;color:#75510e;border:1px solid #eed9a8}
