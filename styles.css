@@ -430,3 +430,39 @@ button:focus-visible,a:focus-visible{outline:3px solid #e9bd65;outline-offset:3p
 .programme-fee-source-row{grid-column:1/-1;padding:0 0 8px}
 .course-tuition-verified{color:#17633d}
 .course-tuition-unverified,.course-tuition-unknown{color:#81520b}
+
+
+/* Student admission enquiry form */
+.admission-page{max-width:980px;padding-top:42px;padding-bottom:85px}
+.admission-eyebrow{display:block;color:#ffdc91;font-size:12px;font-weight:850;letter-spacing:1.7px;margin-top:20px}
+.admission-intro{margin-bottom:24px}
+.admission-intro h2{font-size:26px;margin:0 0 8px}
+.admission-intro p{color:var(--muted);margin:0 0 17px}
+.admission-steps{display:flex;flex-wrap:wrap;gap:10px}
+.admission-steps span{background:#edf4fb;color:#244e77;border-radius:30px;padding:7px 12px;font-size:12px;font-weight:750}
+.admission-form{border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 8px 28px #102a4c0b;padding:28px}
+.admission-form-section{border:0;border-bottom:1px solid var(--line);padding:0 0 25px;margin:0 0 25px}
+.admission-form-section h2{font-size:20px;margin:0 0 18px;color:var(--navy)}
+.admission-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 20px}
+.admission-grid label,.admission-notes{display:block;font-size:13px;font-weight:750;color:#334d67;min-width:0}
+.admission-grid input,.admission-grid select,.admission-notes textarea{display:block;width:100%;margin-top:7px;border:1px solid #cbd8e6;border-radius:9px;padding:12px 13px;background:#fff;color:var(--text);min-width:0;font:inherit;font-weight:450}
+.admission-grid input:focus,.admission-grid select:focus,.admission-notes textarea:focus{outline:3px solid #b8d8f4;outline-offset:1px;border-color:#1769b1}
+.admission-country-field{border:1px solid var(--line);border-radius:11px;padding:15px 17px;margin:21px 0}
+.admission-country-field legend{font-size:13px;font-weight:800;padding:0 5px;color:#334d67}
+.admission-country-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.admission-country-grid label,.admission-consent{display:flex;align-items:flex-start;gap:9px;font-size:13px;font-weight:550;color:#435b73}
+.admission-country-grid input,.admission-consent input{margin:3px 0 0;accent-color:#1769b1;flex:0 0 auto}
+.admission-notes textarea{resize:vertical}
+.admission-consent{margin:21px 0 9px;line-height:1.55}
+.admission-consent a{font-weight:750}
+.admission-privacy-note{font-size:12px;color:var(--muted)}
+.admission-submit{display:inline-flex;justify-content:center;align-items:center;background:var(--gold);color:#172f4c;border:0;border-radius:10px;padding:14px 22px;font-weight:850;cursor:pointer}
+.admission-submit:hover{background:#ffd578}
+.admission-submit:disabled{opacity:.65;cursor:wait}
+.admission-form-status{display:none;margin:14px 0;padding:13px 15px;border-radius:9px;font-size:14px}
+.admission-form-status:not(:empty){display:block}
+.admission-form-status.success{background:#e9f4ef;color:#205b40;border:1px solid #cee6d9}
+.admission-form-status.error{background:#fff0ed;color:#8b3023;border:1px solid #f1cfc8}
+.admission-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.admission-help-tile{border-color:#e5d4ad;background:#fffdf8}
+@media(max-width:650px){.admission-form{padding:19px}.admission-grid,.admission-country-grid{grid-template-columns:1fr}.admission-page{padding-top:28px}}
