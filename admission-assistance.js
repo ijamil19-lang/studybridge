@@ -32,7 +32,7 @@
    form.reset();
    if(programmeId){const hidden=form.querySelector('input[name="programme_id"]');if(hidden)hidden.value=programmeId;}
    source.value=location.href;
-   if(result.notification_sent){setStatus('Thank you. Your admission enquiry has been received and our team has been notified. We will contact you using the details provided.','success');}\n   else{setStatus('Your enquiry has been saved, but email alerts are not configured yet. We are completing the notification setup.','error');}
+   if(result.notification_sent){setStatus('Thank you. Your admission enquiry has been received and our team has been notified. We will contact you using the details provided.','success');}\n   else{setStatus('Your enquiry has been saved, but email alerts are not configured yet. We are completing the notification setup.','pending');}
    form.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(error){
    setStatus(error.message||'Something went wrong. Please try again later.','error');
