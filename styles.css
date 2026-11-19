@@ -420,3 +420,13 @@ button:focus-visible,a:focus-visible{outline:3px solid #e9bd65;outline-offset:3p
  .country-course,.programme-panel{padding:18px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+/* Tuition fee verification labels */
+.fee-status-badge{display:inline-flex;align-items:center;width:fit-content;margin-top:8px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.35}
+.fee-status-verified{background:#e6f5ed;color:#17633d;border:1px solid #b9e2ca}
+.fee-status-unverified{background:#fff4df;color:#81520b;border:1px solid #efd49d}
+.fee-status-unavailable{background:#eef1f5;color:#526174;border:1px solid #d8e0e9}
+.fee-source-link{display:inline-flex;margin-top:8px;color:#175a91;font-size:12px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.programme-fee-source-row{grid-column:1/-1;padding:0 0 8px}
+.course-tuition-verified{color:#17633d}
+.course-tuition-unverified,.course-tuition-unknown{color:#81520b}
