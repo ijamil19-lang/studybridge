@@ -55,7 +55,7 @@ function courseDetails(r){
  const fee=Number(r.tuition_fee);
  if(r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0){
   const currency=String(r.tuition_currency||'').trim();
-  info.push({text:'Listed tuition: '+(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' (confirm applicant fee category)',className:'course-tuition course-tuition-known'});
+  info.push({text:'UNVERIFIED FEE LISTING: '+(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})+' — not confirmed by the university; check the official fee for your applicant category and academic year.',className:'course-tuition course-tuition-unknown'});
  }else{
   info.push({text:'Tuition fees: not yet confirmed — check official university website',className:'course-tuition course-tuition-unknown'});
  }
@@ -81,14 +81,14 @@ function addProgrammeCard(root,r){
  const fee=Number(r.tuition_fee);
  const recorded=r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0;
  tuition.classList.add(recorded?'tuition-recorded':'tuition-unconfirmed');
- tuition.append(el('span','fact-label','Tuition fee'));
+ tuition.append(el('span','fact-label','Tuition fee · verification status'));
  if(recorded){
   const currency=String(r.tuition_currency||'').trim();
   tuition.append(el('strong','fact-value',(currency?currency+' ':'')+fee.toLocaleString('en-GB',{maximumFractionDigits:2})));
-  tuition.append(el('span','fact-help','Listed amount · confirm fee category and year'));
+  tuition.append(el('span','fact-help','UNVERIFIED — research listing only. This amount has not been confirmed by the university. Check the official fee for your applicant category and academic year before making decisions.'));
  }else{
   tuition.append(el('strong','fact-value','Not yet confirmed'));
-  tuition.append(el('span','fact-help','Check the official university website'));
+  tuition.append(el('span','fact-help','No verified amount available. Check the official university website.'));
  }
  const eligibility=internationalEligibility(r.international_students);
  const intl=el('div','programme-card-fact eligibility-fact');
@@ -323,8 +323,8 @@ async function setupProgrammeDetail(){
   detailFact(facts,'Teaching language',r.language||'Check official university website');
   const fee=Number(r.tuition_fee);
   const feeValue=r.tuition_fee!==null&&r.tuition_fee!==undefined&&Number.isFinite(fee)&&fee>0
-   ?(String(r.tuition_currency||'').trim()+' '+fee.toLocaleString('en-GB',{maximumFractionDigits:2})).trim()+' (confirm fee category and year)'
-   :'Check official university website; no confirmed fee is listed';
+   ?'UNVERIFIED RESEARCH LISTING: '+(String(r.tuition_currency||'').trim()+' '+fee.toLocaleString('en-GB',{maximumFractionDigits:2})).trim()+'. Not confirmed by the university; check the official fee for your applicant category and academic year.'
+   :'NOT CONFIRMED: No verified tuition fee is available. Check the official university website.';
   detailFact(facts,'Tuition fees',feeValue);
   const eligibility=internationalEligibility(r.international_students);
   const eligibilityLabel=$('programme-international-status');
